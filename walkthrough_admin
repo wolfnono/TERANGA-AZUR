@@ -1,0 +1,61 @@
+# Espace Admin — Résumé des modifications
+
+## Ce qui a été créé / modifié
+
+### Fichiers modifiés
+| Fichier | Modification |
+|---|---|
+| [teranga_azur_db.sql](file:///c:/Users/regis/OneDrive/Desktop/Teranga_azur/teranga_azur_db.sql) | Colonne `role` ajoutée + compte admin inséré |
+| [connexion.php](file:///c:/Users/regis/OneDrive/Desktop/Teranga_azur/connexion.php) | `password_verify()` activé + rôle en session + redirection admin |
+| [header.php](file:///c:/Users/regis/OneDrive/Desktop/Teranga_azur/header.php) | Lien ⚙️ Admin visible uniquement pour les admins |
+
+### Nouveaux fichiers
+| Fichier | Rôle |
+|---|---|
+| [logout.php](file:///c:/Users/regis/OneDrive/Desktop/Teranga_azur/logout.php) | Déconnexion sécurisée |
+| [admin_guard.php](file:///c:/Users/regis/OneDrive/Desktop/Teranga_azur/admin_guard.php) | Middleware : bloque l'accès si non-admin |
+| [migration_admin.sql](file:///c:/Users/regis/OneDrive/Desktop/Teranga_azur/migration_admin.sql) | Script SQL pour bases existantes |
+| [css/admin.css](file:///c:/Users/regis/OneDrive/Desktop/Teranga_azur/css/admin.css) | Styles dark du panneau admin |
+| [admin/dashboard.php](file:///c:/Users/regis/OneDrive/Desktop/Teranga_azur/admin/dashboard.php) | Tableau de bord avec statistiques |
+| [admin/villas.php](file:///c:/Users/regis/OneDrive/Desktop/Teranga_azur/admin/villas.php) | Liste + suppression des villas |
+| [admin/villa-form.php](file:///c:/Users/regis/OneDrive/Desktop/Teranga_azur/admin/villa-form.php) | Formulaire ajout / édition villa |
+| [admin/activites.php](file:///c:/Users/regis/OneDrive/Desktop/Teranga_azur/admin/activites.php) | Liste + suppression des activités |
+| [admin/activite-form.php](file:///c:/Users/regis/OneDrive/Desktop/Teranga_azur/admin/activite-form.php) | Formulaire ajout / édition activité |
+
+---
+
+## Compte administrateur
+
+| Champ | Valeur |
+|---|---|
+| **Email** | `admin@teranga-azur.sn` |
+| **Mot de passe** | `Admin1234!` |
+
+---
+
+## Étapes pour rendre la fonctionnalité active
+
+> [!IMPORTANT]
+> Vous devez mettre à jour la base de données avant de tester.
+
+**Si la base n'existe pas encore** (première installation) :
+1. Ouvrir **phpMyAdmin** → `http://localhost/phpmyadmin`
+2. Importer [teranga_azur_db.sql](file:///c:/Users/regis/OneDrive/Desktop/Teranga_azur/teranga_azur_db.sql)
+
+**Si la base existe déjà** :
+1. Ouvrir **phpMyAdmin** → sélectionner `teranga_azur_db`
+2. Onglet **SQL** → coller et exécuter le contenu de [migration_admin.sql](file:///c:/Users/regis/OneDrive/Desktop/Teranga_azur/migration_admin.sql)
+
+---
+
+## Workflow admin
+
+```
+Connexion → admin@teranga-azur.sn / Admin1234!
+    ↓
+Dashboard (admin/dashboard.php)
+    ├── Villas → Ajouter / Modifier / Supprimer
+    └── Activités → Ajouter / Modifier / Supprimer
+```
+
+Les modifications sont immédiatement visibles sur le site public ([villas.php](file:///c:/Users/regis/OneDrive/Desktop/Teranga_azur/villas.php), [activites.php](file:///c:/Users/regis/OneDrive/Desktop/Teranga_azur/activites.php)).

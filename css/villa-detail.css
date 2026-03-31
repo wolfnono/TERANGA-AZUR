@@ -1,0 +1,297 @@
+/* css/villa-detail.css */
+
+/* Gallery */
+.villa-gallery {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 12px;
+  max-height: 520px;
+  overflow: hidden;
+  padding: 0 5%;
+}
+
+.gallery-main img {
+  width: 100%;
+  height: 520px;
+  object-fit: cover;
+  border-radius: 0 0 0 16px;
+  cursor: zoom-in;
+  transition: transform 0.4s ease;
+}
+
+.gallery-main img:hover {
+  transform: scale(1.02);
+}
+
+.gallery-thumbs {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.gallery-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  opacity: 0.75;
+}
+
+.gallery-thumb:hover,
+.gallery-thumb.active {
+  opacity: 1;
+  border-color: var(--or-sable);
+}
+
+/* Villa detail layout */
+.villa-detail-section {
+  padding-top: 40px;
+}
+
+.villa-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 60px;
+  align-items: start;
+}
+
+.villa-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--texte-gris);
+  margin-bottom: 20px;
+}
+
+.villa-breadcrumb a {
+  color: var(--bleu-moyen);
+  text-decoration: none;
+}
+
+.villa-breadcrumb span:last-child {
+  color: var(--texte-sombre);
+}
+
+.villa-title {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  color: var(--bleu-profond);
+  margin-bottom: 16px;
+}
+
+.villa-specs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 36px;
+  padding: 24px;
+  background: var(--creme);
+  border-radius: 14px;
+}
+
+.spec-item {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.spec-item i {
+  font-size: 1.3rem;
+  color: var(--bleu-moyen);
+}
+
+.spec-item strong {
+  font-size: 1.1rem;
+  color: var(--bleu-profond);
+}
+
+.spec-item span {
+  font-size: 0.78rem;
+  color: var(--texte-gris);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.villa-description h2 {
+  font-size: 1.5rem;
+  color: var(--bleu-profond);
+  margin-bottom: 16px;
+}
+
+.villa-description p {
+  color: var(--texte-gris);
+  line-height: 1.9;
+  font-size: 1rem;
+}
+
+.villa-services {
+  margin-top: 40px;
+}
+
+.villa-services h2 {
+  font-size: 1.5rem;
+  color: var(--bleu-profond);
+  margin-bottom: 20px;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.service-card {
+  background: var(--creme);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--creme-fonce);
+}
+
+.service-card h4 {
+  color: var(--bleu-profond);
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+.service-card p {
+  color: var(--texte-gris);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.service-price {
+  color: var(--or-sable);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Booking sidebar */
+.villa-booking-sidebar {
+  position: sticky;
+  top: 100px;
+}
+
+.booking-card {
+  background: var(--blanc);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 12px 50px rgba(26, 58, 92, 0.12);
+  border: 1px solid var(--creme-fonce);
+}
+
+.booking-price {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--creme-fonce);
+}
+
+.price-amount {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--bleu-profond);
+}
+
+.price-unit {
+  font-size: 0.9rem;
+  color: var(--texte-gris);
+  font-weight: 300;
+}
+
+.service-option {
+  background: var(--creme);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.service-option label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--texte-sombre);
+  flex: 1;
+}
+
+.service-option label small {
+  color: var(--or-sable);
+  font-weight: 600;
+}
+
+.qty-input {
+  width: 60px;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.price-summary {
+  background: var(--creme);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  color: var(--texte-gris);
+  margin-bottom: 8px;
+}
+
+.price-row.total {
+  font-weight: 600;
+  color: var(--bleu-profond);
+  font-size: 1rem;
+  border-top: 1px solid #ddd;
+  padding-top: 8px;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .villa-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .villa-booking-sidebar {
+    position: static;
+  }
+
+  .villa-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-thumbs {
+    grid-template-rows: none;
+    grid-template-columns: repeat(4, 1fr);
+    height: 80px;
+  }
+
+  .gallery-main img {
+    height: 350px;
+    border-radius: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .villa-specs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
