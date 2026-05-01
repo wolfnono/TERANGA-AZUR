@@ -58,7 +58,7 @@ $msg = $_GET['msg'] ?? '';
 include 'includes/header.php';
 ?>
 
-<div class="page-hero" style="background:linear-gradient(135deg,rgba(26,58,92,0.95) 0%,rgba(42,95,143,0.85) 100%);min-height:260px;">
+<div class="page-hero" style="background:linear-gradient(135deg,rgba(26,58,46,0.95) 0%,rgba(45,90,79,0.85) 100%);min-height:260px;">
   <div class="page-hero-content">
     <span class="section-label" style="color:var(--or-sable);">Mon espace</span>
     <h1 style="color:var(--blanc);">Mes Réservations</h1>

@@ -1,121 +1,87 @@
-# 🌊 TERANGA AZUR — Guide d'installation
+#  Teranga Azur - Système de Location de Villas & Activités
 
-**À toi ton toit de rêve**
+Plateforme de réservation de villas de luxe et d'activités touristiques au Sénégal.
 
----
+##  Table des matières
+- Vue d'ensemble
+- Installation
+- Structure du projet
+- Fonctionnalités principales
+- Guide d'utilisation
 
-## Structure du projet
+##  Vue d'ensemble
 
-```
-teranga-azur/
-├── config/
-│   ├── db.php                   # Connexion PDO MySQL
-│   └── teranga_azur_db.sql      # Script SQL complet avec données démo
-├── css/
-│   ├── style.css                # Styles globaux (navbar, footer, boutons...)
-│   ├── home.css                 # Styles page d'accueil
-│   ├── villas.css               # Styles liste villas
-│   └── villa-detail.css         # Styles page villa détail
-├── images/                      # ← AJOUTER VOS IMAGES ICI
-│   ├── logo.png                 # Logo Teranga Azur (déjà fourni)
-│   ├── hero-main.jpg            # Image hero accueil
-│   ├── hero-villas.jpg          # Image hero page villas
-│   ├── hero-activites.jpg       # Image hero page activités
-│   ├── cta-bg.jpg               # Image section CTA
-│   ├── villa-placeholder.jpg    # Image par défaut villas
-│   ├── activite-placeholder.jpg # Image par défaut activités
-│   ├── villas/
-│   │   ├── villa-1-1.jpg        # Photos villa ID 1 (vue 1)
-│   │   ├── villa-1-2.jpg        # Photos villa ID 1 (vue 2)
-│   │   └── ...
-│   └── activites/
-│       ├── activite-1.jpg       # Photo activité ID 1
-│       └── ...
-├── includes/
-│   ├── header.php               # Navigation commune
-│   └── footer.php               # Footer commun
-├── js/
-│   └── main.js                  # JavaScript global
-├── index.php                    # Page d'accueil
-├── villas.php                   # Liste des villas (avec filtres)
-├── villa-detail.php             # Détail d'une villa + réservation
-├── activites.php                # Liste des activités (avec filtres)
-├── activite-detail.php          # Détail d'une activité + réservation
-├── mes-reservations.php         # Espace client : mes réservations
-├── inscription.php              # Formulaire d'inscription
-├── connexion.php                # Formulaire de connexion
-└── logout.php                   # Déconnexion
-```
+Teranga Azur est une application web permettant :
+- **Clients** : Consulter, filtrer et réserver des villas et activités
+- **Administrateurs** : Gérer le catalogue avec système de gestion d'images intégré
 
----
+**Technologies :** PHP 7.4+, MySQL 5.7+, HTML5, CSS3, JavaScript
 
-## Installation
+##  Fonctionnalités principales
 
-### 1. Prérequis
-- PHP 8.0+
-- MySQL 5.7+ / MariaDB
-- Serveur web (Apache/Nginx) ou WAMP/XAMPP/Laragon
+###  Gestion des Villas
+- Création/édition/suppression de villas
+- Upload multiple de photos
+- Affichage galerie sur page détail
+- Filtres avancés (prix, chambres, piscine, capacité)
+- Réservation avec calcul auto du prix
 
-### 2. Base de données
-```sql
--- Dans phpMyAdmin ou MySQL CLI :
-SOURCE /chemin/vers/config/teranga_azur_db.sql;
-```
+###  Gestion des Activités
+- Création/édition/suppression d'activités
+- Upload multiple de photos
+- Affichage galerie sur page détail
+- Filtres par prix et durée
+- Réservation avec calcul du prix par personne
 
-### 3. Configuration DB
-Éditer `config/db.php` :
-```php
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'teranga_azur_db');
-define('DB_USER', 'votre_user');
-define('DB_PASS', 'votre_password');
-```
+###  Système d'images
+- Upload simple drag & drop
+- Support JPG, PNG, WebP, GIF (5 Mo max)
+- Stockage en base de données
+- Affichage automatique
+- Suppression avec nettoyage fichiers
 
-### 4. Images
-Copier le logo dans `images/logo.png`, puis ajouter :
-- `images/hero-main.jpg` — Grande photo de villa/plage (1920×1080 min)
-- `images/hero-villas.jpg` — Vue de villa avec piscine
-- `images/hero-activites.jpg` — Photo d'activité (plage, excursion...)
-- `images/cta-bg.jpg` — Photo d'ambiance coucher de soleil
-- `images/villas/villa-{ID}-{NUM}.jpg` — Photos de chaque villa
-- `images/activites/activite-{ID}.jpg` — Photos de chaque activité
+###  Gestion des clients
+- Inscription/connexion sécurisée
+- Historique des réservations
+- Profil utilisateur
+- Admin : Liste clients avec résumé réservations
 
-### 5. Authentification (Production)
-Dans `inscription.php`, remplacer la ligne commentée par :
-```php
-$ins->execute([$nom, $prenom, $email, $hash, $telephone, $pays]);
-```
-Et dans `connexion.php` :
-```php
-if ($client && password_verify($password, $client['password'])) {
-```
+##  Guide d'utilisation
+
+**Réserver une villa :**
+1. Allez à "Nos Villas"
+2. Filtrez par vos critères
+3. Cliquez "Voir les détails"
+4. Consultez la galerie
+5. Sélectionnez vos dates et réservez
+
+**Pour les administrateurs :**
+1. Allez à Admin → Villas (ou Activités)
+2. Créez/Editez un élément
+3. Uploadez vos photos
+4. Les images s'affichent automatiquement
+
+##  Base de données
+
+Tables principales :
+- **villas** - Informations des villas
+- **images_villas** - Photos des villas
+- **activites** - Informations des activités
+- **images_activites** - Photos des activités
+- **clients** - Comptes utilisateurs
+- **reservations** - Enregistrement des réservations
+
+##  URLs principales
+
+| Page | URL |
+|------|-----|
+| Accueil | `/` |
+| Villas | `/villas.php` |
+| Activités | `/activites.php` |
+| Admin | `/admin/dashboard.php` |
+| Connexion | `/connexion.php` |
+| Mes réservations | `/mes-reservations.php` |
 
 ---
 
-## Pages disponibles
-
-| Page | URL | Description |
-|------|-----|-------------|
-| Accueil | `/index.php` | Hero, villas vedettes, activités, stats |
-| Nos Villas | `/villas.php` | Liste filtrée de toutes les villas |
-| Villa Détail | `/villa-detail.php?id=X` | Galerie, caractéristiques, réservation |
-| Activités | `/activites.php` | Liste filtrée de toutes les activités |
-| Activité Détail | `/activite-detail.php?id=X` | Description, réservation |
-| Mes Réservations | `/mes-reservations.php` | Espace client connecté |
-| S'inscrire | `/inscription.php` | Création de compte |
-| Se connecter | `/connexion.php` | Connexion |
-
----
-
-## Palette de couleurs (thème logo)
-
-| Variable | Valeur | Usage |
-|----------|--------|-------|
-| `--bleu-profond` | `#1a3a5c` | Fond navbar, titres |
-| `--bleu-moyen` | `#2a5f8f` | Icônes, liens actifs |
-| `--or-sable` | `#c9a96e` | Accents, prix, tagline |
-| `--creme` | `#f5f0e8` | Fonds de sections |
-
----
-
-*Teranga Azur — © 2025*
+Pour plus d'informations techniques, consultez **DOCUMENTATION-CODE.md**

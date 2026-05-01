@@ -5,18 +5,15 @@ require_once 'config/db.php';
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if (!$id) { header('Location: villas.php'); exit; }
 
-// Récupérer la villa
 $stmt = $pdo->prepare("SELECT * FROM villas WHERE id = ?");
 $stmt->execute([$id]);
 $villa = $stmt->fetch();
 if (!$villa) { header('Location: villas.php'); exit; }
 
-// Images
 $stmt2 = $pdo->prepare("SELECT * FROM images_villas WHERE villa_id = ?");
 $stmt2->execute([$id]);
 $images = $stmt2->fetchAll();
 
-// Services optionnels
 $stmt3 = $pdo->query("SELECT * FROM services_optionnels ORDER BY prix_journalier ASC");
 $services = $stmt3->fetchAll();
 
@@ -24,7 +21,6 @@ $page_title = $villa['titre'];
 $page_desc  = substr($villa['description'] ?? '', 0, 160);
 $extra_css  = "villa-detail.css";
 
-// Gestion réservation
 $message = '';
 $message_type = '';
 
@@ -80,33 +76,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reserver'])) {
 include 'includes/header.php';
 ?>
 
+
 <!-- Galerie -->
 <div class="villa-gallery" style="margin-top:80px;">
+  <?php
+  // 1. On prépare la liste des images depuis la base de données
+  $gallery_images = [];
+  if (!empty($images)) {
+      foreach ($images as $img) {
+          // On suppose que ta colonne s'appelle 'url' d'après ta page villas.php
+          $gallery_images[] = $img['url']; 
+      }
+  } else {
+      // 2. Sécurité : Images par défaut si la villa n'a aucune photo en base
+      $gallery_images = [
+          'images/Vue-Balcon.villa2.png',
+          'images/Jacuzzi-villa2.png',
+          'images/Mini-salon_villa2.png',
+          'images/piscine_vue_de_jour-villa2.png'
+      ];
+  }
+  
+  // L'image principale est la première du tableau
+  $main_img = $gallery_images[0];
+  ?>
+
   <div class="gallery-main">
-    <?php $main_imgs = [1=>'VillaA.png', 2=>'VillaB.png', 3=>'VillaC.png']; $main_img = $main_imgs[$id] ?? 'Vue-Balcon.villa2.png'; ?>
-    <img src="images/<?= $main_img ?>"
+    <img src="<?= htmlspecialchars($main_img) ?>"
          onerror="this.src='images/Logo.png'"
          alt="<?= htmlspecialchars($villa['titre']) ?>"
          id="mainGalleryImg">
   </div>
+  
   <div class="gallery-thumbs">
-    <?php
-    $thumb_imgs = [
-        1=>['Chambre-villa1.png','Salon.png','Terasse.png','Piscine1.png'],
-        2=>['Chambre1-villa2.png','Salon2.png','Cuisine-villa2.png','Piscine-Villa2.png'],
-        3=>['Vue-Balcon.villa2.png','Jacuzzi-villa2.png','Mini-salon_villa2.png','Salle-d\'eau.png']
-    ];
-    $thumbs = $thumb_imgs[$id] ?? ['Vue-Balcon.villa2.png','Jacuzzi-villa2.png','Mini-salon_villa2.png','piscine_vue_de_jour-villa2.png'];
-    $total_imgs = count($thumbs);
-    for ($i = 1; $i <= $total_imgs; $i++):
-      $src = "images/" . $thumbs[$i-1];
-    ?>
+    <?php foreach ($gallery_images as $index => $src): ?>
     <img src="<?= htmlspecialchars($src) ?>"
          onerror="this.src='images/Logo.png'"
-         alt="Vue <?= $i ?>"
-         class="gallery-thumb <?= $i === 1 ? 'active' : '' ?>"
+         alt="Vue <?= $index + 1 ?>"
+         class="gallery-thumb <?= $index === 0 ? 'active' : '' ?>"
          onclick="changeMainImg(this)">
-    <?php endfor; ?>
+    <?php endforeach; ?>
   </div>
 </div>
 

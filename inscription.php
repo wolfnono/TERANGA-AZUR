@@ -71,7 +71,7 @@ include 'includes/header.php';
       <p class="tagline" style="margin-top:6px;">Rejoignez la famille Teranga Azur</p>
     </div>
 
-     <div style="background:var(--blanc);border-radius:20px;padding:40px;box-shadow:0 10px 50px rgba(26,58,92,0.1);">
+     <div style="background:var(--blanc);border-radius:20px;padding:40px;box-shadow:0 10px 50px rgba(26,58,46,0.1);">
 
       <?php if ($message): ?>
       <div class="alert alert-<?= $message_type ?>">

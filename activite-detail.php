@@ -5,10 +5,16 @@ require_once 'config/db.php';
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if (!$id) { header('Location: activites.php'); exit; }
 
-$stmt = $pdo->prepare("SELECT * FROM activites WHERE id = ?");
+$stmt = $pdo->prepare("SELECT a.*,
+  (SELECT url FROM images_activites WHERE activite_id = a.id ORDER BY ordre ASC, id ASC LIMIT 1) AS image_principale
+FROM activites a WHERE a.id = ?");
 $stmt->execute([$id]);
 $activite = $stmt->fetch();
 if (!$activite) { header('Location: activites.php'); exit; }
+
+$stmt_imgs = $pdo->prepare("SELECT * FROM images_activites WHERE activite_id = ? ORDER BY ordre ASC, id ASC");
+$stmt_imgs->execute([$id]);
+$images = $stmt_imgs->fetchAll();
 
 $page_title = $activite['nom_activite'];
 $page_desc  = substr($activite['description'] ?? '', 0, 160);
@@ -46,7 +52,8 @@ include 'includes/header.php';
 ?>
 
 <!-- Hero activité -->
-<div class="page-hero" style="background: var(--gradient-hero), url('images/activites/activite-<?= $id ?>.jpg') center/cover; background-size: cover; min-height:450px; margin-top:80px;">
+<?php $hero_img = $activite['image_principale'] ?? 'images/Logo.png'; ?>
+<div class="page-hero" style="background: var(--gradient-hero), url('<?= htmlspecialchars($hero_img) ?>') center/cover; background-size: cover; min-height:450px; margin-top:80px;">
   <div class="page-hero-content">
     <span class="section-label" style="color:var(--or-sable);">Activité</span>
     <h1 style="color:var(--blanc);font-size:clamp(2rem,5vw,4rem);"><?= htmlspecialchars($activite['nom_activite']) ?></h1>
@@ -78,6 +85,22 @@ include 'includes/header.php';
         <?= nl2br(htmlspecialchars($activite['description'] ?? 'Description en cours de rédaction.')) ?>
       </p>
 
+      <!-- Galerie d'images -->
+      <?php if (!empty($images)): ?>
+      <div style="margin-top:40px;">
+        <h2 style="color:var(--bleu-profond);margin-bottom:20px;">Photos de l'activité</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;">
+          <?php foreach ($images as $img): ?>
+          <img src="<?= htmlspecialchars($img['url']) ?>" alt="<?= htmlspecialchars($activite['nom_activite']) ?>"
+               style="width:100%;height:200px;object-fit:cover;border-radius:12px;cursor:pointer;transition:transform .2s;box-shadow:0 4px 12px rgba(0,0,0,.1);"
+               onmouseover="this.style.transform='scale(1.02)'"
+               onmouseout="this.style.transform='scale(1)'"
+               onerror="this.src='images/Logo.png'">
+          <?php endforeach; ?>
+        </div>
+      </div>
+      <?php endif; ?>
+
       <div style="margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
         <div style="background:var(--creme);padding:24px;border-radius:12px;text-align:center;">
           <i class="fas fa-clock" style="font-size:1.5rem;color:var(--bleu-moyen);margin-bottom:10px;display:block;"></i>
@@ -98,7 +121,7 @@ include 'includes/header.php';
     </div>
 
     <!-- Réservation -->
-    <div class="booking-card" style="background:var(--blanc);border-radius:16px;padding:32px;box-shadow:0 10px 40px rgba(26,58,92,0.1);position:sticky;top:100px;">
+    <div class="booking-card" style="background:var(--blanc);border-radius:16px;padding:32px;box-shadow:0 10px 40px rgba(26,58,46,0.1);position:sticky;top:100px;">
       <h3 style="color:var(--bleu-profond);margin-bottom:24px;font-size:1.5rem;">Réserver cette activité</h3>
 
       <?php if ($message): ?>

@@ -44,8 +44,10 @@ $activites = $pdo->query("SELECT * FROM activites ORDER BY created_at DESC")->fe
     <a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a>
     <a href="villas.php"><i class="fas fa-home"></i> Villas</a>
     <a href="activites.php" class="active"><i class="fas fa-compass"></i> Activités</a>
+    <a href="clients.php"><i class="fas fa-users"></i> Clients</a>
     <div class="admin-nav-label" style="margin-top:20px;">Site public</div>
     <a href="../activites.php" target="_blank"><i class="fas fa-external-link-alt"></i> Voir les activités</a>
+    <a href="../carte.php" target="_blank"><i class="fas fa-map-marked-alt"></i> Carte interactive</a>
     <a href="../index.php" target="_blank"><i class="fas fa-globe"></i> Site public</a>
   </nav>
   <div class="admin-sidebar-footer">

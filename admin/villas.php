@@ -44,8 +44,10 @@ $villas = $pdo->query("SELECT v.*, (SELECT COUNT(*) FROM images_villas WHERE vil
     <a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a>
     <a href="villas.php" class="active"><i class="fas fa-home"></i> Villas</a>
     <a href="activites.php"><i class="fas fa-compass"></i> Activités</a>
+    <a href="clients.php"><i class="fas fa-users"></i> Clients</a>
     <div class="admin-nav-label" style="margin-top:20px;">Site public</div>
     <a href="../villas.php" target="_blank"><i class="fas fa-external-link-alt"></i> Voir les villas</a>
+    <a href="../carte.php" target="_blank"><i class="fas fa-map-marked-alt"></i> Carte interactive</a>
     <a href="../index.php" target="_blank"><i class="fas fa-globe"></i> Site public</a>
   </nav>
   <div class="admin-sidebar-footer">
@@ -114,9 +116,12 @@ $villas = $pdo->query("SELECT v.*, (SELECT COUNT(*) FROM images_villas WHERE vil
                 <?php endif; ?>
               </td>
               <td>
-                <div style="display:flex;gap:8px;">
-                  <a href="villa-form.php?id=<?= $v['id'] ?>" class="btn-admin btn-admin-ghost" style="padding:6px 12px;font-size:0.8rem;" title="Modifier">
-                    <i class="fas fa-edit"></i> Modifier
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <a href="villa-form.php?id=<?= $v['id'] ?>" class="btn-admin btn-admin-ghost" style="padding:6px 12px;font-size:0.8rem;" title="Modifier infos">
+                    <i class="fas fa-edit"></i> Infos
+                  </a>
+                  <a href="villa-images.php?villa_id=<?= $v['id'] ?>" class="btn-admin btn-admin-ghost" style="padding:6px 12px;font-size:0.8rem;" title="Gérer les photos">
+                    <i class="fas fa-images"></i> Photos
                   </a>
                   <form method="POST" action="villas.php" style="display:inline;" onsubmit="return confirm('Supprimer la villa «<?= htmlspecialchars(addslashes($v['titre'])) ?>» ? Cette action est irréversible.')">
                     <input type="hidden" name="delete" value="<?= $v['id'] ?>">

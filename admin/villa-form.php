@@ -1,6 +1,7 @@
 <?php
 /**
- * admin/villa-form.php — Formulaire ajout / édition d'une villa
+ * admin/villa-form.php — Formulaire ajout / édition d'une villa (infos uniquement)
+ * Les photos sont gérées via villa-images.php
  */
 require_once '../admin_guard.php';
 require_once '../config/db.php';
@@ -11,7 +12,6 @@ $villa    = [];
 $msg      = '';
 $msg_type = '';
 
-// Chargement en mode édition
 if ($is_edit) {
     $stmt = $pdo->prepare("SELECT * FROM villas WHERE id = ?");
     $stmt->execute([$id]);
@@ -21,12 +21,12 @@ if ($is_edit) {
 
 // Traitement POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $titre       = trim($_POST['titre'] ?? '');
-    $description = trim($_POST['description'] ?? '');
-    $prix        = (float)($_POST['prix_par_nuit'] ?? 0);
-    $capacite    = (int)($_POST['capacite_max'] ?? 1);
-    $chambres    = (int)($_POST['chambres'] ?? 1);
-    $piscine     = isset($_POST['piscine']) ? 1 : 0;
+    $titre        = trim($_POST['titre'] ?? '');
+    $description  = trim($_POST['description'] ?? '');
+    $prix         = (float)($_POST['prix_par_nuit'] ?? 0);
+    $capacite     = (int)($_POST['capacite_max'] ?? 1);
+    $chambres     = (int)($_POST['chambres'] ?? 1);
+    $piscine      = isset($_POST['piscine']) ? 1 : 0;
     $localisation = trim($_POST['localisation'] ?? '');
 
     $errors = [];
@@ -44,16 +44,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $stmt = $pdo->prepare("INSERT INTO villas (titre, description, prix_par_nuit, capacite_max, chambres, piscine, localisation) VALUES (?,?,?,?,?,?,?)");
             $stmt->execute([$titre, $description, $prix, $capacite, $chambres, $piscine, $localisation]);
-            header('Location: villas.php?success=created');
+            $new_id = (int)$pdo->lastInsertId();
+            header("Location: villa-images.php?villa_id=$new_id");
             exit;
         }
     } else {
-        $msg = implode(' ', $errors);
+        $msg      = implode(' ', $errors);
         $msg_type = 'error';
-        // Repeupler
-        $villa = compact('titre','description','prix_par_nuit','capacite_max','chambres','piscine','localisation');
+        $villa    = compact('titre','description','localisation');
         $villa['prix_par_nuit'] = $prix;
         $villa['capacite_max']  = $capacite;
+        $villa['chambres']      = $chambres;
+        $villa['piscine']       = $piscine;
     }
 }
 ?>
@@ -61,10 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?= $is_edit ? 'Modifier la villa' : 'Ajouter une villa' ?> — Admin Teranga Azur</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title><?= $is_edit ? 'Modifier la villa' : 'Ajouter une villa' ?> — Admin</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="../css/admin.css">
 </head>
@@ -81,16 +81,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a>
     <a href="villas.php" class="active"><i class="fas fa-home"></i> Villas</a>
     <a href="activites.php"><i class="fas fa-compass"></i> Activités</a>
-    <div class="admin-nav-label" style="margin-top:20px;">Site public</div>
+    <a href="clients.php"><i class="fas fa-users"></i> Clients</a>
+    <div class="admin-nav-label" style="margin-top:18px;">Site public</div>
     <a href="../villas.php" target="_blank"><i class="fas fa-external-link-alt"></i> Voir les villas</a>
+    <a href="../carte.php" target="_blank"><i class="fas fa-map-marked-alt"></i> Carte interactive</a>
     <a href="../index.php" target="_blank"><i class="fas fa-globe"></i> Site public</a>
   </nav>
   <div class="admin-sidebar-footer">
     <div class="admin-user">
       <div class="admin-avatar"><?= strtoupper(substr($_SESSION['client_prenom'] ?? 'A', 0, 1)) ?></div>
       <div>
-        <div style="font-weight:600;font-size:0.85rem;color:var(--admin-text);"><?= htmlspecialchars($_SESSION['client_prenom'] . ' ' . $_SESSION['client_nom']) ?></div>
-        <div style="font-size:0.75rem;color:var(--admin-accent);">Administrateur</div>
+        <div style="font-weight:600;font-size:0.85rem;color:var(--a-text);"><?= htmlspecialchars(($_SESSION['client_prenom'] ?? '') . ' ' . ($_SESSION['client_nom'] ?? '')) ?></div>
+        <div style="font-size:0.72rem;color:var(--a-or);">Administrateur</div>
       </div>
     </div>
     <a href="../logout.php"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
@@ -115,14 +117,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php if ($msg): ?>
     <div class="admin-alert admin-alert-<?= $msg_type ?>">
-      <i class="fas fa-exclamation-circle"></i> <?= htmlspecialchars($msg) ?>
+      <i class="fas fa-<?= $msg_type === 'success' ? 'check-circle' : 'exclamation-circle' ?>"></i>
+      <?= htmlspecialchars($msg) ?>
     </div>
     <?php endif; ?>
 
     <div class="admin-card">
       <div class="admin-card-header">
-        <h2><i class="fas fa-home" style="color:var(--admin-accent);margin-right:8px;"></i>
-          <?= $is_edit ? 'Modifier les informations' : 'Informations de la villa' ?>
+        <h2><i class="fas fa-home" style="color:var(--a-or);margin-right:9px;"></i>
+          <?= $is_edit ? 'Informations de la villa' : 'Nouvelle villa' ?>
         </h2>
       </div>
       <div class="admin-card-body">
@@ -138,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <!-- Description -->
           <div class="field">
             <label for="description">Description</label>
-            <textarea id="description" name="description" placeholder="Décrivez la villa..."><?= htmlspecialchars($villa['description'] ?? '') ?></textarea>
+            <textarea id="description" name="description" placeholder="Décrivez la villa, ses équipements, son atmosphère..."><?= htmlspecialchars($villa['description'] ?? '') ?></textarea>
           </div>
 
           <div class="form-grid">
@@ -179,16 +182,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="checkbox-field">
               <input type="checkbox" id="piscine" name="piscine" value="1"
                      <?= !empty($villa['piscine']) ? 'checked' : '' ?>>
-              <label for="piscine"><i class="fas fa-swimming-pool" style="color:var(--admin-accent);"></i> Cette villa dispose d'une piscine privée</label>
+              <label for="piscine"><i class="fas fa-swimming-pool"></i> Cette villa dispose d'une piscine privée</label>
             </div>
           </div>
 
           <!-- Boutons -->
-          <div style="display:flex;gap:14px;margin-top:12px;">
-            <button type="submit" class="btn-admin btn-admin-primary" style="padding:12px 28px;font-size:0.9rem;">
+          <div style="display:flex;gap:14px;margin-top:18px;">
+            <button type="submit" class="btn-admin btn-admin-primary" style="padding:11px 28px;font-size:0.9rem;">
               <i class="fas fa-save"></i> <?= $is_edit ? 'Enregistrer les modifications' : 'Créer la villa' ?>
             </button>
-            <a href="villas.php" class="btn-admin btn-admin-ghost" style="padding:12px 20px;font-size:0.9rem;">
+            <a href="villas.php" class="btn-admin btn-admin-ghost" style="padding:11px 20px;font-size:0.9rem;">
               Annuler
             </a>
           </div>
@@ -196,6 +199,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
       </div>
     </div>
+
+    <!-- Info photos -->
+    <?php if ($is_edit): ?>
+    <div class="admin-card" style="background:rgba(74,140,125,.06);border-color:rgba(74,140,125,.2);">
+      <div class="admin-card-header" style="padding:16px 22px;">
+        <div>
+          <h2 style="font-size:1rem;margin-bottom:4px;">
+            <i class="fas fa-images" style="color:var(--a-bleu-l);margin-right:8px;"></i>
+            Gérer les photos
+          </h2>
+          <p style="font-size:0.82rem;color:var(--a-muted);margin:0;">
+            Les photos sont gérées séparément pour plus de flexibilité.
+          </p>
+        </div>
+        <a href="villa-images.php?villa_id=<?= $id ?>" class="btn-admin btn-admin-primary">
+          <i class="fas fa-image"></i> Aller aux photos
+        </a>
+      </div>
+    </div>
+    <?php endif; ?>
 
   </div>
 </main>

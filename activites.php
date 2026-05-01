@@ -5,7 +5,6 @@ require_once 'config/db.php';
 $page_title = "Activités";
 $page_desc  = "Découvrez nos activités et excursions au Sénégal.";
 
-// Filtres
 $search      = isset($_GET['q']) ? trim($_GET['q']) : '';
 $prix_max    = isset($_GET['prix_max']) && $_GET['prix_max'] !== '' ? (int)$_GET['prix_max'] : null;
 $duree_max   = isset($_GET['duree']) && $_GET['duree'] !== '' ? (int)$_GET['duree'] : null;
@@ -20,7 +19,12 @@ if ($search) {
 if ($prix_max) { $where[] = 'prix_par_personne <= :prix_max'; $params[':prix_max'] = $prix_max; }
 if ($duree_max) { $where[] = 'duree_heures <= :duree'; $params[':duree'] = $duree_max; }
 
-$sql = "SELECT * FROM activites WHERE " . implode(' AND ', $where) . " ORDER BY prix_par_personne ASC";
+$sql = "SELECT a.*, MIN(img.url) AS image_principale
+FROM activites a
+LEFT JOIN images_activites img ON a.id = img.activite_id
+WHERE " . implode(' AND ', $where) . "
+GROUP BY a.id
+ORDER BY a.prix_par_personne ASC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
 $activites = $stmt->fetchAll();
@@ -93,30 +97,37 @@ include 'includes/header.php';
   <div class="grid-3">
     <?php foreach ($activites as $activite): ?>
     <div class="card activite-card">
-      <div class="card-img-wrapper">
-        <?php $a_imgs = [1=>'Piscine1.png', 2=>'Piscine2.png']; $a_img = $a_imgs[$activite['id']] ?? 'Salon.png'; ?>
-        <img src="images/<?= $a_img ?>"
-             onerror="this.src='images/Logo.png'"
-             alt="<?= htmlspecialchars($activite['nom_activite']) ?>"
-             class="card-img">
-        <span class="card-badge">
-          <i class="fas fa-clock"></i> <?= $activite['duree_heures'] ?>h
-        </span>
-      </div>
-      <div class="card-body">
-        <h3 class="card-title"><?= htmlspecialchars($activite['nom_activite']) ?></h3>
-        <p class="card-desc"><?= htmlspecialchars(substr($activite['description'] ?? '', 0, 120)) ?>...</p>
-        <div class="card-features">
-          <span class="feature-tag"><i class="fas fa-clock"></i> <?= $activite['duree_heures'] ?> heure(s)</span>
-          <span class="feature-tag"><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($activite['lieu_depart']) ?></span>
+      <a href="activite-detail.php?id=<?= $activite['id'] ?>" style="text-decoration:none;color:inherit;">
+        <div class="card-img-wrapper" style="cursor:pointer;">
+          <?php $a_img = $activite['image_principale'] ?? 'images/Logo.png'; ?>
+          <img src="<?= htmlspecialchars($a_img) ?>"
+               onerror="this.src='images/Logo.png'"
+               alt="<?= htmlspecialchars($activite['nom_activite']) ?>"
+               class="card-img">
+          <span class="card-badge">
+            <i class="fas fa-clock"></i> <?= $activite['duree_heures'] ?>h
+          </span>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;">
-          <div class="card-price">
-            <?= number_format($activite['prix_par_personne'], 0, ',', ' ') ?> XOF
-            <span style="font-weight:300;font-size:0.8rem;color:var(--texte-gris)">/pers.</span>
+        <div class="card-body">
+          <h3 class="card-title"><?= htmlspecialchars($activite['nom_activite']) ?></h3>
+          <p class="card-desc"><?= htmlspecialchars(substr($activite['description'] ?? '', 0, 120)) ?>...</p>
+          <div class="card-features">
+            <span class="feature-tag"><i class="fas fa-clock"></i> <?= $activite['duree_heures'] ?> heure(s)</span>
+            <span class="feature-tag"><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($activite['lieu_depart']) ?></span>
           </div>
-          <a href="activite-detail.php?id=<?= $activite['id'] ?>" class="btn btn-dark" style="padding:10px 20px;font-size:0.82rem;">
-            Réserver
+        </div>
+      </a>
+      <div style="padding:0 20px 20px;">
+        <div style="margin-bottom:12px;">
+          <div class="card-price" style="margin:0;margin-bottom:2px;"><?= number_format($activite['prix_par_personne'], 0, ',', ' ') ?> XOF</div>
+          <span style="font-weight:300;font-size:0.75rem;color:var(--texte-gris);">/pers.</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <a href="activite-detail.php?id=<?= $activite['id'] ?>" class="btn btn-outline" style="flex:1;padding:10px 12px;font-size:0.8rem;justify-content:center;">
+            <i class="fas fa-eye"></i> Voir
+          </a>
+          <a href="checkout.php?type=activite&id=<?= $activite['id'] ?>" class="btn btn-dark" style="flex:1;padding:10px 12px;font-size:0.8rem;justify-content:center;">
+            <i class="fas fa-calendar-alt"></i> Réserver
           </a>
         </div>
       </div>

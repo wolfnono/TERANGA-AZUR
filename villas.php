@@ -6,14 +6,12 @@ $page_title = "Nos Villas";
 $page_desc  = "Découvrez notre sélection de villas de luxe au Sénégal.";
 $extra_css  = "villas.css";
 
-// Filtres GET
 $filtre_piscine   = isset($_GET['piscine']) ? (int)$_GET['piscine'] : null;
 $filtre_chambres  = isset($_GET['chambres']) ? (int)$_GET['chambres'] : null;
 $filtre_prix_max  = isset($_GET['prix_max']) && $_GET['prix_max'] !== '' ? (int)$_GET['prix_max'] : null;
 $filtre_voyageurs = isset($_GET['voyageurs']) && $_GET['voyageurs'] !== '' ? (int)$_GET['voyageurs'] : null;
 $search           = isset($_GET['q']) ? trim($_GET['q']) : '';
 
-// Construction de la requête
 $where = ['1=1'];
 $params = [];
 
@@ -23,7 +21,12 @@ if ($filtre_prix_max) { $where[] = 'prix_par_nuit <= :prix_max'; $params[':prix_
 if ($filtre_voyageurs) { $where[] = 'capacite_max >= :voyageurs'; $params[':voyageurs'] = $filtre_voyageurs; }
 if ($search) { $where[] = '(titre LIKE :q OR localisation LIKE :q2)'; $params[':q'] = "%$search%"; $params[':q2'] = "%$search%"; }
 
-$sql = "SELECT * FROM villas WHERE " . implode(' AND ', $where) . " ORDER BY prix_par_nuit DESC";
+$sql = "SELECT v.*, MIN(img.url) AS image_principale
+FROM villas v
+LEFT JOIN images_villas img ON v.id = img.villa_id
+WHERE " . implode(' AND ', $where) . "
+GROUP BY v.id
+ORDER BY v.prix_par_nuit DESC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
 $villas = $stmt->fetchAll();
@@ -121,9 +124,9 @@ include 'includes/header.php';
     <?php foreach ($villas as $villa): ?>
     <div class="card villa-card">
       <div class="card-img-wrapper">
-        <?php $v_imgs = [1=>'VillaA.png', 2=>'VillaB.png', 3=>'VillaC.png']; $v_img = $v_imgs[$villa['id']] ?? 'Vue-Balcon.villa2.png'; ?>
-        <img src="images/<?= $v_img ?>"
-             onerror="this.src='images/Logo.png'"
+        <?php $v_img = $villa['image_principale'] ?? 'images/logo.png'; ?>
+        <img src="<?= htmlspecialchars($v_img) ?>"
+             onerror="this.src='images/logo.png'"
              alt="<?= htmlspecialchars($villa['titre']) ?>"
              class="card-img">
         <?php if ($villa['piscine']): ?>
@@ -139,9 +142,14 @@ include 'includes/header.php';
           <span class="feature-tag"><i class="fas fa-door-open"></i> <?= $villa['chambres'] ?> chambres</span>
           <span class="feature-tag"><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($villa['localisation']) ?></span>
         </div>
-        <a href="villa-detail.php?id=<?= $villa['id'] ?>" class="btn btn-dark" style="width:100%;justify-content:center;">
-          Voir la villa <i class="fas fa-arrow-right"></i>
-        </a>
+        <div style="display:flex;gap:10px;">
+          <a href="villa-detail.php?id=<?= $villa['id'] ?>" class="btn btn-outline" style="flex:1;justify-content:center;">
+            Voir les détails <i class="fas fa-arrow-right"></i>
+          </a>
+          <a href="checkout.php?type=villa&id=<?= $villa['id'] ?>" class="btn btn-dark" style="flex:1;justify-content:center;">
+            <i class="fas fa-calendar-alt"></i> Réserver
+          </a>
+        </div>
       </div>
     </div>
     <?php endforeach; ?>

@@ -1,6 +1,15 @@
 <?php
 // includes/header.php - Navigation & Head commune
 $current_page = basename($_SERVER['PHP_SELF'], '.php');
+
+// Auto-initialisation du système d'images (une seule fois)
+if (!file_exists(__DIR__ . '/../.init_done')) {
+    try {
+        require_once __DIR__ . '/../_init-db.php';
+    } catch (Exception $e) {
+        // Silencieux si déjà créé
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -37,8 +46,12 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
     <li><a href="index.php" class="<?= $current_page === 'index' ? 'active' : '' ?>">Accueil</a></li>
     <li><a href="villas.php" class="<?= $current_page === 'villas' ? 'active' : '' ?>">Nos Villas</a></li>
     <li><a href="activites.php" class="<?= $current_page === 'activites' ? 'active' : '' ?>">Activités</a></li>
+    <li><a href="carte.php" class="<?= $current_page === 'carte' ? 'active' : '' ?>">Carte</a></li>
     <?php if (isset($_SESSION['client_id'])): ?>
     <li><a href="mes-reservations.php" class="<?= $current_page === 'mes-reservations' ? 'active' : '' ?>">Mes Réservations</a></li>
+    <?php if (($_SESSION['role'] ?? '') === 'admin'): ?>
+    <li><a href="admin/dashboard.php" title="Panneau Admin" style="font-size:0.9rem;opacity:0.7;text-transform:none;letter-spacing:0;"><i class="fas fa-cog"></i> Admin</a></li>
+    <?php endif; ?>
     <li><a href="logout.php">Déconnexion</a></li>
     <?php else: ?>
     <li><a href="inscription.php" class="<?= $current_page === 'inscription' ? 'active' : '' ?>">S'inscrire</a></li>

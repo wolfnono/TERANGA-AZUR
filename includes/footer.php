@@ -68,10 +68,14 @@
 
   <div class="footer-bottom">
     <span>© <?= date('Y') ?> Teranga Azur. Tous droits réservés.</span>
-    <div style="display:flex;gap:20px;">
+    <div style="display:flex;gap:20px;align-items:center;">
       <a href="#" style="color:rgba(255,255,255,0.4);text-decoration:none;">Mentions légales</a>
       <a href="#" style="color:rgba(255,255,255,0.4);text-decoration:none;">Politique de confidentialité</a>
       <a href="#" style="color:rgba(255,255,255,0.4);text-decoration:none;">CGU</a>
+      <?php if (isset($_SESSION['client_id']) && ($_SESSION['role'] ?? '') === 'admin'): ?>
+      <span style="color:rgba(255,255,255,0.2);">·</span>
+      <a href="admin/dashboard.php" style="color:rgba(255,255,255,0.3);text-decoration:none;font-size:0.85rem;transition:color .2s;" onmouseover="this.style.color='rgba(255,255,255,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'"><i class="fas fa-cog"></i> Admin</a>
+      <?php endif; ?>
     </div>
   </div>
 </footer>

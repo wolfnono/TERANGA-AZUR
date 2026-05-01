@@ -1,0 +1,200 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║            TERANGA AZUR - SYSTÈME DE PAIEMENT FICTIF                      ║
+║                         GUIDE DE DÉMARRAGE RAPIDE                         ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+ INSTALLATION EN 3 ÉTAPES
+═══════════════════════════════════════════════════════════════════════════
+
+ÉTAPE 1 : Accédez à la page d'installation
+──────────────────────────────────────────
+URL : http://localhost:8080/Teranga_azur/install-payment-system.php
+
+Cette page va :
+  ✓ Vérifier tous les fichiers
+  ✓ Créer automatiquement la table de base de données
+  ✓ Afficher le statut de chaque composant
+
+ÉTAPE 2 : Attendez la confirmation
+──────────────────────────────────
+Vous devriez voir un message vert : "Excellent! Tous les composants sont..."
+
+Si quelque chose échoue :
+  ✗ Vérifiez que XAMPP (MySQL) est en cours d'exécution
+  ✗ Vérifiez que le port 8080 n'est pas bloqué
+  ✗ Vérifiez que le fichier php.ini permet les extensions PDO
+
+
+ÉTAPE 3 : Commencez à tester
+─────────────────────────────
+Cliquez sur le bouton "Tester avec les Villas" ou "Tester avec les Activités"
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+ SCÉNARIO DE TEST RAPIDE
+═════════════════════════════════════════════════════════════════════════════
+
+1. VILLAS
+─────────
+   → Allez sur : http://localhost:8080/Teranga_azur/villas.php
+   → Cliquez sur "Réserver" d'une villa
+   → Sélectionnez des dates (ex: 15 mai au 20 mai 2024)
+   → Cliquez "Continuer vers le paiement"
+   → Remplissez le formulaire :
+       Numéro de carte    : 4111111111111111
+       Titulaire         : Test User
+       Expiration        : 12/28
+       CVC               : 123
+   → Cliquez "Confirmer le paiement"
+   → Vous verrez la page de confirmation
+
+2. ACTIVITÉS
+────────────
+   → Allez sur : http://localhost:8080/Teranga_azur/activites.php
+   → Cliquez sur "Réserver" d'une activité
+   → Sélectionnez des dates et le nombre de personnes
+   → Suivez le même processus de paiement
+
+═══════════════════════════════════════════════════════════════════════════
+
+ FICHIERS CRÉÉS
+═════════════════════════════════════════════════════════════════════════════
+
+checkout.php                    → Sélection des dates
+paiement.php                    → Formulaire de paiement fictif
+confirmation.php                → Page de confirmation
+install-payment-system.php      → Installation et diagnostic
+PAYWALL_README.md               → Documentation complète
+IMPLEMENTATION_SUMMARY.md       → Vue d'ensemble technique
+QUICK_START.txt                 → Ce fichier
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+ DÉPANNAGE RAPIDE
+═════════════════════════════════════════════════════════════════════════════
+
+ Erreur : "La table reservations n'existe pas"
+→ Visitez install-payment-system.php pour créer la table
+
+ Erreur : "Connexion à la base de données impossible"
+→ Vérifiez que MySQL est démarré dans XAMPP
+→ Port doit être 3307 (pas 3306)
+
+ Les boutons "Réserver" ne font rien
+→ Vérifiez que villas.php et activites.php ont les bons liens
+→ Recherchez "checkout.php" dans les fichiers
+
+ La page est blanche ou 404
+→ Vérifiez l'URL : http://localhost:8080/Teranga_azur/...
+→ Assurez-vous que XAMPP Apache s'exécute sur port 8080
+
+ Les prix ne s'affichent pas
+→ Ouvrez la console développeur (F12)
+→ Vérifiez les erreurs JavaScript
+→ Assurez-vous que les dates sont sélectionnées
+
+═══════════════════════════════════════════════════════════════════════════
+
+ NUMÉROS DE TEST FICTIFS
+═════════════════════════════════════════════════════════════════════════════
+
+Vous pouvez utiliser n'importe quel numéro de carte 16 chiffres :
+
+   4111111111111111  (Visa fictive)
+   5555555555554444  (Mastercard fictive)
+   3782822463100005  (American Express fictive)
+   6011111111111117  (Discover fictive)
+
+Autres champs :
+   Titulaire         : N'importe quel nom (minimum 3 caractères)
+   Expiration        : Format MM/YY (ex: 12/28, 06/26, etc.)
+   CVC               : N'importe quel 3 chiffres (ex: 123, 456, 789)
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+ DOCUMENTATION COMPLÈTE
+═════════════════════════════════════════════════════════════════════════════
+
+Pour une documentation détaillée, consultez :
+   PAYWALL_README.md           (Guide complet)
+   IMPLEMENTATION_SUMMARY.md   (Détails techniques)
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+ CHECKLIST DE DÉMARRAGE
+═════════════════════════════════════════════════════════════════════════════
+
+Avant de commencer, vérifiez :
+   ☐ XAMPP est en cours d'exécution
+   ☐ Apache écoute le port 8080
+   ☐ MySQL s'exécute sur le port 3307
+   ☐ La base de données teranga_azur_db existe
+   ☐ Vous pouvez accéder à http://localhost:8080/Teranga_azur/index.php
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+ FLUX COMPLET
+═════════════════════════════════════════════════════════════════════════════
+
+   Utilisateur
+      ↓
+   Visite villas.php ou activites.php
+      ↓
+   Clique sur "Réserver"
+      ↓
+   checkout.php (sélection des dates)
+      ↓
+   Clique "Continuer vers le paiement"
+      ↓
+   paiement.php (formulaire fictif)
+      ↓
+   Clique "Confirmer le paiement"
+      ↓
+   Données sauvegardées en base de données
+      ↓
+   confirmation.php (numéro de réservation)
+      ↓
+   Fin de la réservation
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+ QUESTIONS FRÉQUENTES
+═════════════════════════════════════════════════════════════════════════════
+
+Q: Est-ce un vrai système de paiement?
+R: NON - C'est un système FICTIF pour démonstration (projet de classe)
+
+Q: Où sont sauvegardées les réservations?
+R: Table "reservations" dans la base de données MySQL
+
+Q: Puis-je modifier les textes et styles?
+R: OUI - Tous les fichiers sont modifiables
+
+Q: Comment ajouter plus de champs au formulaire?
+R: Éditez paiement.php et confirmation.php
+
+Q: Peut-on envoyer des emails de confirmation?
+R: Oui, mais il faudra ajouter PHPMailer
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+ COMMENCEZ MAINTENANT
+═════════════════════════════════════════════════════════════════════════════
+
+Visitez : http://localhost:8080/Teranga_azur/install-payment-system.php
+
+Pour lire la documentation complète : PAYWALL_README.md
+
+
+═══════════════════════════════════════════════════════════════════════════
+                            Bon test! 
+═══════════════════════════════════════════════════════════════════════════

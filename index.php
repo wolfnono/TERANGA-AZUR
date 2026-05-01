@@ -6,10 +6,22 @@ $page_title = "Accueil";
 $page_desc  = "Teranga Azur — Location de villas de luxe au Sénégal. Séjours d'exception face à l'océan.";
 $extra_css  = "home.css";
 
-$stmt = $pdo->query("SELECT * FROM villas ORDER BY prix_par_nuit DESC LIMIT 3");
+// Requête pour les villas avec leur image principale
+$sql_villas = "SELECT v.*, MIN(img.url) AS image_principale 
+               FROM villas v 
+               LEFT JOIN images_villas img ON v.id = img.villa_id 
+               GROUP BY v.id 
+               ORDER BY v.prix_par_nuit DESC LIMIT 3";
+$stmt = $pdo->query($sql_villas);
 $villas_vedettes = $stmt->fetchAll();
 
-$stmt2 = $pdo->query("SELECT * FROM activites ORDER BY prix_par_personne ASC LIMIT 3");
+// Requête pour les activités avec leur image principale
+$sql_activites = "SELECT a.*, MIN(img.url) AS image_principale 
+                  FROM activites a 
+                  LEFT JOIN images_activites img ON a.id = img.activite_id 
+                  GROUP BY a.id 
+                  ORDER BY a.prix_par_personne ASC LIMIT 3";
+$stmt2 = $pdo->query($sql_activites);
 $activites_vedettes = $stmt2->fetchAll();
 
 include 'includes/header.php';
@@ -111,15 +123,15 @@ include 'includes/header.php';
     <?php foreach ($villas_vedettes as $villa): ?>
     <div class="card villa-card">
       <div class="card-img-wrapper">
-        <?php $v_imgs = [1=>'VillaA.png', 2=>'VillaB.png', 3=>'VillaC.png']; $v_img = $v_imgs[$villa['id']] ?? 'Vue-Balcon.villa2.png'; ?>
-        <img src="images/<?= $v_img ?>"
+        <?php $v_img = $villa['image_principale'] ?? 'images/VillaC.png'; ?>
+        <img src="<?= htmlspecialchars($v_img) ?>"
              onerror="this.src='images/Logo.png'"
              alt="<?= htmlspecialchars($villa['titre']) ?>"
              class="card-img">
         <?php if ($villa['piscine']): ?>
         <span class="card-badge"><i class="fas fa-swimming-pool"></i> Piscine</span>
         <?php endif; ?>
-      </div>
+      </div> 
       <div class="card-body">
         <div class="card-price"><?= number_format($villa['prix_par_nuit'], 0, ',', ' ') ?> XOF <span style="font-weight:300;font-size:0.85rem;color:var(--texte-gris)">/ nuit</span></div>
         <h3 class="card-title"><?= htmlspecialchars($villa['titre']) ?></h3>
@@ -187,13 +199,13 @@ include 'includes/header.php';
     <?php foreach ($activites_vedettes as $activite): ?>
     <div class="card activite-card">
       <div class="card-img-wrapper">
-        <?php $a_imgs = [1=>'Piscine1.png', 2=>'Piscine2.png']; $a_img = $a_imgs[$activite['id']] ?? 'Salon.png'; ?>
-        <img src="images/<?= $a_img ?>"
+        <?php $a_img = $activite['image_principale'] ?? 'images/Salon.png'; ?>
+        <img src="<?= htmlspecialchars($a_img) ?>"
              onerror="this.src='images/Logo.png'"
              alt="<?= htmlspecialchars($activite['nom_activite']) ?>"
              class="card-img">
         <span class="card-badge"><?= $activite['duree_heures'] ?>h</span>
-      </div>
+      </div> 
       <div class="card-body">
         <h3 class="card-title"><?= htmlspecialchars($activite['nom_activite']) ?></h3>
         <p class="card-desc"><?= htmlspecialchars(substr($activite['description'] ?? '', 0, 110)) ?>...</p>
