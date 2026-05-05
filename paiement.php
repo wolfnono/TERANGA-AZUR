@@ -1,12 +1,7 @@
 <?php
-/**
- * paiement.php — Formulaire de paiement fictif
- * Traite la réservation et la sauvegarde en base de données
- */
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require_once 'config/db.php';
 
-// Vérifier que checkout a bien été effectué
 if (empty($_SESSION['checkout'])) {
     header('Location: index.php');
     exit;
@@ -14,7 +9,6 @@ if (empty($_SESSION['checkout'])) {
 
 $checkout = $_SESSION['checkout'];
 
-// Traitement du formulaire de paiement
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = [];
     $carte = trim($_POST['numero_carte'] ?? '');
@@ -22,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $expiration = trim($_POST['expiration'] ?? '');
     $cvc = trim($_POST['cvc'] ?? '');
 
-    // Validation simple
     if (!$carte || strlen($carte) !== 16 || !ctype_digit($carte)) {
         $errors[] = "Numéro de carte invalide (16 chiffres).";
     }
@@ -37,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors)) {
-        // Sauvegarder la réservation en base de données
         $client_id = $_SESSION['client_id'] ?? null;
         $type = $checkout['type'];
         $item_id = $checkout['item_id'];
@@ -64,10 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $reservation_id = (int)$pdo->lastInsertId();
 
-        // Nettoyer la session
         unset($_SESSION['checkout']);
 
-        // Rediriger vers confirmation
         header("Location: confirmation.php?id=$reservation_id");
         exit;
     }
@@ -269,7 +259,6 @@ include 'includes/header.php';
 
 <div class="payment-container">
 
-  <!-- Formulaire de paiement -->
   <div class="payment-card">
     <h2>Informations de paiement</h2>
 
@@ -323,7 +312,6 @@ include 'includes/header.php';
     </form>
   </div>
 
-  <!-- Résumé de la réservation -->
   <div class="payment-card payment-summary">
     <h2>Résumé de votre réservation</h2>
 

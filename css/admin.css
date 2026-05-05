@@ -1,46 +1,40 @@
-/* ============================================================
-   css/admin.css — Panneau d'administration Teranga Azur
-   Thème : Vert profond & Or sablé (cohérent avec style.css)
-   ============================================================ */
-
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Palette identique au site public */
-  --a-bleu     : #1a3a2e;   /* --bleu-profond */
-  --a-bleu-m   : #2d5a4f;   /* --bleu-moyen  */
-  --a-bleu-l   : #4a8c7d;   /* --bleu-clair  */
-  --a-or       : #d4af5a;   /* --or-dore     */
-  --a-or-s     : #c9a96e;   /* --or-sable    */
+  
+  --a-bleu     : #1a3a2e;   
+  --a-bleu-m   : #2d5a4f;   
+  --a-bleu-l   : #4a8c7d;   
+  --a-or       : #d4af5a;   
+  --a-or-s     : #c9a96e;   
 
-  /* Surfaces sombres */
+  
   --a-bg       : #0a1512;
   --a-sidebar  : #0d1f1a;
   --a-sidebar2 : #101f24;
   --a-card     : #0f2620;
   --a-input    : #0a1512;
 
-  /* Textes */
+  
   --a-text     : #e8f0f8;
   --a-muted    : #7a9bc0;
   --a-faint    : #4a6a88;
 
-  /* Bordures */
+  
   --a-border   : #1a3a34;
   --a-border-l : #235047;
 
-  /* États */
+  
   --a-success  : #22c55e;
   --a-danger   : #ef4444;
   --a-warning  : #f59e0b;
 
-  /* Misc */
+  
   --a-radius   : 12px;
   --a-shadow   : 0 4px 24px rgba(0,0,0,.45);
   --a-transition: all 0.18s ease;
 }
 
-/* ── RESET & BASE ─────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 .admin-body {
   margin: 0;
@@ -53,7 +47,6 @@
   line-height: 1.5;
 }
 
-/* ── SIDEBAR ──────────────────────────────────── */
 .admin-sidebar {
   width: 256px;
   min-height: 100vh;
@@ -67,7 +60,6 @@
   box-shadow: 4px 0 20px rgba(0,0,0,.3);
 }
 
-/* Logo */
 .admin-sidebar-logo {
   padding: 26px 22px 22px;
   border-bottom: 1px solid var(--a-border);
@@ -103,7 +95,6 @@
   margin-top: 2px;
 }
 
-/* Nav */
 .admin-nav { padding: 18px 0; flex: 1; }
 
 .admin-nav-label {
@@ -141,7 +132,6 @@
   font-weight: 600;
 }
 
-/* Footer sidebar */
 .admin-sidebar-footer {
   padding: 18px 20px;
   border-top: 1px solid var(--a-border);
@@ -174,7 +164,6 @@
   border: 2px solid var(--a-or);
 }
 
-/* ── MAIN CONTENT ─────────────────────────────── */
 .admin-main {
   margin-left: 256px;
   flex: 1;
@@ -183,7 +172,6 @@
   min-height: 100vh;
 }
 
-/* Topbar */
 .admin-topbar {
   background: var(--a-sidebar2);
   border-bottom: 1px solid var(--a-border);
@@ -212,7 +200,6 @@
 
 .admin-content { padding: 28px; flex: 1; }
 
-/* ── STATS ────────────────────────────────────── */
 .admin-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px,1fr));
@@ -258,7 +245,6 @@
 .stat-number { font-size: 1.9rem; font-weight: 700; line-height: 1; }
 .stat-label  { font-size: 0.78rem; color: var(--a-muted); margin-top: 4px; }
 
-/* ── CARDS ────────────────────────────────────── */
 .admin-card {
   background: var(--a-card);
   border: 1px solid var(--a-border);
@@ -279,7 +265,6 @@
 }
 .admin-card-body { padding: 22px; }
 
-/* ── TABLE ────────────────────────────────────── */
 .admin-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
 .admin-table th {
   text-align: left; padding: 9px 13px;
@@ -295,7 +280,6 @@
 .admin-table tr:hover td { background: rgba(74,140,125,.04); }
 .admin-table .title-cell { font-weight: 500; }
 
-/* ── BADGES ───────────────────────────────────── */
 .badge {
   display: inline-flex; align-items: center; gap: 5px;
   padding: 3px 10px; border-radius: 20px;
@@ -306,7 +290,6 @@
 .badge-blue   { background: rgba(74,140,125,.14); color: #4ade80; border: 1px solid rgba(74,140,125,.25); }
 .badge-gold   { background: rgba(212,175,90,.13); color: var(--a-or); border: 1px solid rgba(212,175,90,.25); }
 
-/* ── BOUTONS ──────────────────────────────────── */
 .btn-admin {
   display: inline-flex; align-items: center; gap: 7px;
   padding: 9px 18px; border-radius: 9px;
@@ -343,7 +326,6 @@
 }
 .btn-admin-ghost:hover { background: rgba(122,155,192,.18); color: var(--a-text); }
 
-/* ── FORMULAIRES ──────────────────────────────── */
 .admin-form .form-grid {
   display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
 }
@@ -391,7 +373,6 @@
   font-size: 0.88rem; color: var(--a-text); cursor: pointer;
 }
 
-/* ── ALERTES ──────────────────────────────────── */
 .admin-alert {
   padding: 13px 16px; border-radius: 9px; font-size: 0.86rem;
   margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
@@ -404,7 +385,6 @@
   background: rgba(239,68,68,.08); border-color: #ef4444; color: #f87171;
 }
 
-/* ── IMAGES (villa-form / activite-form) ──────── */
 .img-preview-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(110px,1fr));
@@ -437,7 +417,6 @@
 }
 .file-drop-zone i { font-size: 1.8rem; display: block; margin-bottom: 8px; opacity: .5; }
 
-/* ── RESPONSIVE ───────────────────────────────── */
 @media (max-width: 900px) {
   .admin-sidebar { width: 220px; }
   .admin-main { margin-left: 220px; }

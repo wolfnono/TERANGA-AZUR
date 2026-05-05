@@ -51,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reserver'])) {
 include 'includes/header.php';
 ?>
 
-<!-- Hero activité -->
 <?php $hero_img = $activite['image_principale'] ?? 'images/Logo.png'; ?>
 <div class="page-hero" style="background: var(--gradient-hero), url('<?= htmlspecialchars($hero_img) ?>') center/cover; background-size: cover; min-height:450px; margin-top:80px;">
   <div class="page-hero-content">
@@ -73,7 +72,6 @@ include 'includes/header.php';
 
 <section class="section">
   <div style="display:grid;grid-template-columns:1fr 380px;gap:50px;align-items:start;" class="detail-grid">
-    <!-- Description -->
     <div>
       <div style="margin-bottom:16px;">
         <a href="activites.php" style="color:var(--bleu-moyen);text-decoration:none;font-size:0.88rem;">
@@ -85,7 +83,6 @@ include 'includes/header.php';
         <?= nl2br(htmlspecialchars($activite['description'] ?? 'Description en cours de rédaction.')) ?>
       </p>
 
-      <!-- Galerie d'images -->
       <?php if (!empty($images)): ?>
       <div style="margin-top:40px;">
         <h2 style="color:var(--bleu-profond);margin-bottom:20px;">Photos de l'activité</h2>
@@ -120,7 +117,6 @@ include 'includes/header.php';
       </div>
     </div>
 
-    <!-- Réservation -->
     <div class="booking-card" style="background:var(--blanc);border-radius:16px;padding:32px;box-shadow:0 10px 40px rgba(26,58,46,0.1);position:sticky;top:100px;">
       <h3 style="color:var(--bleu-profond);margin-bottom:24px;font-size:1.5rem;">Réserver cette activité</h3>
 

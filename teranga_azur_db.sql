@@ -1,7 +1,7 @@
 /*M!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-12.2.2-MariaDB, for Linux (x86_64)
 --
--- Host: localhost    Database: teranga_azur_db
+-- Host: 127.0.0.1    Database: teranga_azur_db
 -- ------------------------------------------------------
 -- Server version	12.2.2-MariaDB
 
@@ -392,4 +392,4 @@ SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-05-01 19:02:05
+-- Dump completed on 2026-05-05  9:45:11

@@ -6,7 +6,6 @@ $page_title = "Accueil";
 $page_desc  = "Teranga Azur — Location de villas de luxe au Sénégal. Séjours d'exception face à l'océan.";
 $extra_css  = "home.css";
 
-// Requête pour les villas avec leur image principale
 $sql_villas = "SELECT v.*, MIN(img.url) AS image_principale 
                FROM villas v 
                LEFT JOIN images_villas img ON v.id = img.villa_id 
@@ -15,7 +14,6 @@ $sql_villas = "SELECT v.*, MIN(img.url) AS image_principale
 $stmt = $pdo->query($sql_villas);
 $villas_vedettes = $stmt->fetchAll();
 
-// Requête pour les activités avec leur image principale
 $sql_activites = "SELECT a.*, MIN(img.url) AS image_principale 
                   FROM activites a 
                   LEFT JOIN images_activites img ON a.id = img.activite_id 
@@ -26,7 +24,6 @@ $activites_vedettes = $stmt2->fetchAll();
 
 include 'includes/header.php';
 ?>
-
 
 <section class="hero" id="hero">
   <div class="hero-bg">

@@ -1,11 +1,7 @@
 <?php
-/**
- * admin/clients.php — Gestion des clients
- */
 require_once '../admin_guard.php';
 require_once '../config/db.php';
 
-// Récupérer tous les clients
 $search = isset($_GET['q']) ? trim($_GET['q']) : '';
 $where = "role='client'";
 $params = [];
@@ -29,7 +25,6 @@ $stmt = $pdo->prepare("
 $stmt->execute($params);
 $clients = $stmt->fetchAll();
 
-// Message de succès/erreur
 $msg = '';
 $msg_type = '';
 if (isset($_GET['success'])) {
@@ -52,7 +47,6 @@ if (isset($_GET['success'])) {
 </head>
 <body class="admin-body">
 
-<!-- SIDEBAR -->
 <aside class="admin-sidebar">
   <a href="../index.php" class="admin-sidebar-logo">
     <img src="../images/Logo.png" alt="Teranga Azur">
@@ -81,7 +75,6 @@ if (isset($_GET['success'])) {
   </div>
 </aside>
 
-<!-- MAIN -->
 <main class="admin-main">
   <div class="admin-topbar">
     <div>
@@ -99,7 +92,6 @@ if (isset($_GET['success'])) {
     </div>
     <?php endif; ?>
 
-    <!-- Barre de recherche -->
     <div class="admin-card" style="margin-bottom:24px;">
       <form method="GET" action="clients.php" style="display:flex;gap:12px;align-items:flex-end;">
         <div style="flex:1;">
@@ -119,7 +111,6 @@ if (isset($_GET['success'])) {
       </form>
     </div>
 
-    <!-- Tableau des clients -->
     <div class="admin-card">
       <div class="admin-card-header">
         <h2><i class="fas fa-users" style="color:var(--a-or);margin-right:8px;"></i> <?= count($clients) ?> client<?= count($clients) > 1 ? 's' : '' ?></h2>

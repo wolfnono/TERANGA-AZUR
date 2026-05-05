@@ -1,7 +1,4 @@
 <?php
-/**
- * admin/client-detail.php — Détails d'un client
- */
 require_once '../admin_guard.php';
 require_once '../config/db.php';
 
@@ -12,7 +9,6 @@ if (!$client_id) {
     exit;
 }
 
-// Récupérer le client
 $stmt = $pdo->prepare("SELECT * FROM clients WHERE id = ?");
 $stmt->execute([$client_id]);
 $client = $stmt->fetch();
@@ -22,7 +18,6 @@ if (!$client) {
     exit;
 }
 
-// Récupérer les réservations villas
 $stmt2 = $pdo->prepare("
     SELECT rv.*, v.titre, v.prix_par_nuit
     FROM reservations_villas rv
@@ -33,7 +28,6 @@ $stmt2 = $pdo->prepare("
 $stmt2->execute([$client_id]);
 $reservations_villas = $stmt2->fetchAll();
 
-// Récupérer les réservations nouvelles
 $stmt3 = $pdo->prepare("
     SELECT r.*,
            v.titre as villa_titre, a.nom_activite
@@ -59,7 +53,6 @@ $reservations_new = $stmt3->fetchAll();
 </head>
 <body class="admin-body">
 
-<!-- SIDEBAR -->
 <aside class="admin-sidebar">
   <a href="../index.php" class="admin-sidebar-logo">
     <img src="../images/Logo.png" alt="Teranga Azur">
@@ -88,7 +81,6 @@ $reservations_new = $stmt3->fetchAll();
   </div>
 </aside>
 
-<!-- MAIN -->
 <main class="admin-main">
   <div class="admin-topbar">
     <div>
@@ -104,7 +96,6 @@ $reservations_new = $stmt3->fetchAll();
 
   <div class="admin-content">
 
-    <!-- Informations client -->
     <div class="admin-card" style="margin-bottom:24px;">
       <div class="admin-card-header">
         <h2><i class="fas fa-user" style="color:var(--a-or);margin-right:8px;"></i> Informations personnelles</h2>
@@ -163,7 +154,6 @@ $reservations_new = $stmt3->fetchAll();
       </div>
     </div>
 
-    <!-- Réservations -->
     <div class="admin-card">
       <div class="admin-card-header">
         <h2><i class="fas fa-calendar-alt" style="color:var(--a-or);margin-right:8px;"></i> Réservations</h2>
@@ -191,7 +181,6 @@ $reservations_new = $stmt3->fetchAll();
             </tr>
           </thead>
           <tbody>
-            <!-- Anciennes réservations -->
             <?php foreach ($reservations_villas as $res): ?>
             <tr>
               <td style="color:var(--a-muted);font-size:0.9rem;">
@@ -207,7 +196,6 @@ $reservations_new = $stmt3->fetchAll();
             </tr>
             <?php endforeach; ?>
 
-            <!-- Nouvelles réservations -->
             <?php foreach ($reservations_new as $res): ?>
             <tr>
               <td style="color:var(--a-muted);font-size:0.9rem;">

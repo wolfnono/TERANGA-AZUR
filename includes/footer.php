@@ -1,8 +1,5 @@
-<?php // includes/footer.php ?>
-
 <footer>
   <div class="footer-grid">
-    <!-- Brand -->
     <div>
       <div class="footer-logo">
         <img src="images/Logo.png" alt="Teranga Azur">
@@ -20,7 +17,6 @@
       </div>
     </div>
 
-    <!-- Navigation -->
     <div>
       <div class="footer-title">Navigation</div>
       <ul class="footer-links">
@@ -32,7 +28,6 @@
       </ul>
     </div>
 
-    <!-- Services -->
     <div>
       <div class="footer-title">Services</div>
       <ul class="footer-links">
@@ -44,7 +39,6 @@
       </ul>
     </div>
 
-    <!-- Contact -->
     <div>
       <div class="footer-title">Contact</div>
       <div class="footer-contact-item">
@@ -80,7 +74,6 @@
   </div>
 </footer>
 
-<!-- JS Global -->
 <script src="js/main.js"></script>
 <?php if (isset($extra_js)): ?>
 <script src="js/<?= $extra_js ?>"></script>

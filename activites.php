@@ -32,7 +32,6 @@ $activites = $stmt->fetchAll();
 include 'includes/header.php';
 ?>
 
-<!-- Hero -->
 <div class="page-hero" style="background: var(--gradient-hero), url('images/Piscine1.png') center/cover;">
   <div class="page-hero-content">
     <span class="section-label" style="color:var(--or-sable);">Explorer</span>
@@ -41,7 +40,6 @@ include 'includes/header.php';
   </div>
 </div>
 
-<!-- Filtres -->
 <div class="filters-bar">
   <form method="GET" action="activites.php" style="display:contents;">
     <div class="filter-group">
@@ -79,7 +77,6 @@ include 'includes/header.php';
   </form>
 </div>
 
-<!-- Liste activités -->
 <section class="section" style="padding-top:50px;">
   <div style="margin-bottom:28px;">
     <h2 style="color:var(--bleu-profond);font-size:1.4rem;">
@@ -137,7 +134,6 @@ include 'includes/header.php';
   <?php endif; ?>
 </section>
 
-<!-- Section expérience Teranga -->
 <section class="section" style="background:var(--creme);padding:80px 5%;">
   <div style="max-width:700px;margin:0 auto;text-align:center;">
     <span class="section-label">Notre promesse</span>

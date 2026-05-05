@@ -1,7 +1,4 @@
 <?php
-/**
- * mon-compte.php — Gestion du compte utilisateur (profil + mot de passe)
- */
 session_start();
 require_once 'config/db.php';
 
@@ -14,7 +11,6 @@ $page_title = "Mon Compte";
 $page_desc  = "Gérez vos informations personnelles et votre mot de passe.";
 $client_id  = $_SESSION['client_id'];
 
-// Charger le client
 $stmt = $pdo->prepare("SELECT * FROM clients WHERE id = ?");
 $stmt->execute([$client_id]);
 $client = $stmt->fetch();
@@ -22,12 +18,8 @@ $client = $stmt->fetch();
 $msg      = '';
 $msg_type = '';
 
-// -------------------------------------------------------
-// Traitement du formulaire
-// -------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // --- MISE À JOUR PROFIL ---
     if (isset($_POST['update_profile'])) {
         $nom       = trim($_POST['nom'] ?? '');
         $prenom    = trim($_POST['prenom'] ?? '');
@@ -40,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$prenom) $errors[] = "Le prénom est requis.";
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Email invalide.";
 
-        // Vérifier email dupliqué
         if (empty($errors)) {
             $check = $pdo->prepare("SELECT id FROM clients WHERE email = ? AND id != ?");
             $check->execute([$email, $client_id]);
@@ -50,10 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($errors)) {
             $pdo->prepare("UPDATE clients SET nom=?, prenom=?, email=?, telephone=?, pays=? WHERE id=?")
                 ->execute([$nom, $prenom, $email, $telephone, $pays, $client_id]);
-            // Mettre à jour la session
             $_SESSION['client_nom']    = $nom;
             $_SESSION['client_prenom'] = $prenom;
-            // Recharger les données
             $stmt->execute([$client_id]);
             $client = $stmt->fetch();
             $msg      = "Vos informations ont été mises à jour avec succès.";
@@ -64,7 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // --- CHANGEMENT DE MOT DE PASSE ---
     if (isset($_POST['update_password'])) {
         $old_pwd  = $_POST['old_password'] ?? '';
         $new_pwd  = $_POST['new_password'] ?? '';
@@ -86,7 +74,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo->prepare("UPDATE clients SET password=? WHERE id=?")->execute([$hash, $client_id]);
             $msg      = "Mot de passe modifié avec succès.";
             $msg_type = 'success';
-            // Recharger le client pour avoir le nouveau hash
             $stmt->execute([$client_id]);
             $client = $stmt->fetch();
         } else {
@@ -96,7 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Stats rapides
 $nb_villas  = $pdo->prepare("SELECT COUNT(*) FROM reservations_villas WHERE client_id = ?");
 $nb_villas->execute([$client_id]);
 $nb_v = $nb_villas->fetchColumn();
@@ -110,7 +96,6 @@ $membre_depuis = date('F Y', strtotime($client['created_at']));
 include 'includes/header.php';
 ?>
 
-<!-- HERO -->
 <div class="page-hero" style="background:linear-gradient(135deg,rgba(26,58,46,0.95) 0%,rgba(42,95,143,0.85) 100%);min-height:280px;">
   <div class="page-hero-content">
     <span class="section-label" style="color:var(--or-sable);">Mon espace</span>
@@ -132,7 +117,6 @@ include 'includes/header.php';
 
   <div style="max-width:900px;margin:0 auto;">
 
-    <!-- STATS RAPIDES -->
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:48px;">
       <div style="background:var(--creme);border-radius:16px;padding:28px 24px;text-align:center;">
         <div style="font-size:2.2rem;font-weight:700;color:var(--bleu-profond);font-family:'Cormorant Garamond',serif;"><?= $nb_v ?></div>
@@ -158,7 +142,6 @@ include 'includes/header.php';
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;">
 
-      <!-- ===== FORMULAIRE PROFIL ===== -->
       <div style="background:var(--blanc);border-radius:20px;padding:36px;box-shadow:0 8px 40px var(--ombre);">
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--creme-fonce);">
           <div style="width:48px;height:48px;background:linear-gradient(135deg,var(--bleu-profond),var(--bleu-moyen));border-radius:12px;display:flex;align-items:center;justify-content:center;">
@@ -218,9 +201,7 @@ include 'includes/header.php';
         </form>
       </div>
 
-      <!-- ===== FORMULAIRE MOT DE PASSE ===== -->
       <div>
-        <!-- Changer le mot de passe -->
         <div style="background:var(--blanc);border-radius:20px;padding:36px;box-shadow:0 8px 40px var(--ombre);margin-bottom:24px;">
           <div style="display:flex;align-items:center;gap:14px;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--creme-fonce);">
             <div style="width:48px;height:48px;background:linear-gradient(135deg,#c9a96e,#d4af5a);border-radius:12px;display:flex;align-items:center;justify-content:center;">
@@ -266,7 +247,6 @@ include 'includes/header.php';
           </form>
         </div>
 
-        <!-- Liens rapides -->
         <div style="background:var(--creme);border-radius:20px;padding:28px;">
           <h3 style="font-size:1rem;color:var(--bleu-profond);margin-bottom:16px;font-family:'Jost',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;">
             <i class="fas fa-link" style="color:var(--or-sable);margin-right:8px;"></i>Accès rapides

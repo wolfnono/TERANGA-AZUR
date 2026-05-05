@@ -3,7 +3,6 @@ session_start();
 require_once 'config/db.php';
 
 if (isset($_SESSION['client_id'])) {
-  // Déjà connecté: rediriger selon le rôle
   if (($_SESSION['role'] ?? '') === 'admin') {
     header('Location: admin/dashboard.php');
   } else {
@@ -55,7 +54,6 @@ include 'includes/header.php';
 <div style="min-height:100vh;background:var(--creme);display:flex;align-items:center;justify-content:center;padding:100px 20px 60px;">
   <div style="width:100%;max-width:460px;">
 
-    <!-- Logo -->
     <div style="text-align:center;margin-bottom:36px;">
       <a href="index.php">
         <img src="images/Logo.png" alt="Teranga Azur" style="height:60px;margin-bottom:16px;">
@@ -64,7 +62,6 @@ include 'includes/header.php';
       <p class="tagline" style="margin-top:6px;">Connectez-vous à votre espace</p>
     </div>
 
-    <!-- Card -->
     <div style="background:var(--blanc);border-radius:20px;padding:40px;box-shadow:0 10px 50px rgba(26,58,46,0.1);">
 
       <?php if ($message): ?>
@@ -107,7 +104,6 @@ include 'includes/header.php';
         </button>
       </form>
 
-      <!-- Séparateur -->
       <div style="display:flex;align-items:center;gap:16px;margin:28px 0;">
         <div style="flex:1;height:1px;background:#eee;"></div>
         <span style="font-size:0.8rem;color:var(--texte-gris);">ou</span>
@@ -120,7 +116,6 @@ include 'includes/header.php';
       </p>
     </div>
 
-    <!-- Retour accueil -->
     <p style="text-align:center;margin-top:20px;">
       <a href="index.php" style="color:var(--texte-gris);font-size:0.85rem;text-decoration:none;">
         <i class="fas fa-arrow-left"></i> Retour à l'accueil

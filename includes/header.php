@@ -1,13 +1,10 @@
 <?php
-// includes/header.php - Navigation & Head commune
 $current_page = basename($_SERVER['PHP_SELF'], '.php');
 
-// Auto-initialisation du système d'images (une seule fois)
 if (!file_exists(__DIR__ . '/../.init_done')) {
     try {
         require_once __DIR__ . '/../_init-db.php';
     } catch (Exception $e) {
-        // Silencieux si déjà créé
     }
 }
 ?>
@@ -19,13 +16,11 @@ if (!file_exists(__DIR__ . '/../.init_done')) {
   <title><?= isset($page_title) ? $page_title . ' — Teranga Azur' : 'Teranga Azur — À toi ton toit de rêve' ?></title>
   <meta name="description" content="<?= isset($page_desc) ? $page_desc : 'Teranga Azur, location de villas de luxe avec piscine au bord de la mer. Découvrez nos villas d\'exception et nos activités.' ?>">
 
-  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- CSS -->
   <link rel="stylesheet" href="css/style.css">
   <?php if (isset($extra_css)): ?>
   <link rel="stylesheet" href="css/<?= $extra_css ?>">

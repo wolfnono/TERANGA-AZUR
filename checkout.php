@@ -1,8 +1,4 @@
 <?php
-/**
- * checkout.php — Panier & sélection des dates
- * Calcul automatique du prix basé sur la durée du séjour
- */
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require_once 'config/db.php';
 
@@ -41,7 +37,6 @@ $errors = [];
 $prix_total = 0;
 $nuits = 0;
 
-// Traitement POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $arrivee = trim($_POST['date_arrivee'] ?? '');
     $depart  = trim($_POST['date_depart'] ?? '');
@@ -65,7 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $prix_total = $qty * $prix_unitaire;
             }
 
-            // Sauvegarde en session et redirection
             $_SESSION['checkout'] = [
                 'type'         => $type,
                 'item_id'      => $item_id,
@@ -249,7 +243,6 @@ include 'includes/header.php';
 
   <div class="checkout-card">
 
-    <!-- Résumé article -->
     <div class="item-summary">
       <div class="item-summary-icon">
         <?php if ($type === 'villa'): ?>
@@ -270,7 +263,6 @@ include 'includes/header.php';
       </div>
     </div>
 
-    <!-- Formulaire -->
     <form method="POST">
 
       <div class="form-grid">
@@ -292,7 +284,6 @@ include 'includes/header.php';
         <?php endif; ?>
       </div>
 
-      <!-- Résumé prix (JS) -->
       <div class="price-summary" id="priceSummary" style="display:none;">
         <div class="price-line">
           <span id="priceDesc"></span>

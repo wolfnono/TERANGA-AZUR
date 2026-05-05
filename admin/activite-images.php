@@ -1,8 +1,4 @@
 <?php
-/**
- * admin/activite-images.php — Gestion des photos d'une activité
- * Upload simple + suppression individuelle
- */
 require_once '../admin_guard.php';
 require_once '../config/db.php';
 
@@ -13,11 +9,9 @@ $ALLOWED = ['image/jpeg','image/png','image/webp','image/gif'];
 
 if (!is_dir(UPLOAD_DIR)) { mkdir(UPLOAD_DIR, 0755, true); }
 
-// ID activité obligatoire
 $activite_id = isset($_GET['activite_id']) && is_numeric($_GET['activite_id']) ? (int)$_GET['activite_id'] : 0;
 if (!$activite_id) { header('Location: activites.php'); exit; }
 
-// Charger l'activité
 $s = $pdo->prepare("SELECT * FROM activites WHERE id = ?");
 $s->execute([$activite_id]);
 $activite = $s->fetch();
@@ -25,7 +19,6 @@ if (!$activite) { header('Location: activites.php'); exit; }
 
 $msg = ''; $msg_type = '';
 
-// ── SUPPRESSION ───────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $img_id = (int)$_POST['delete_id'];
     $r = $pdo->prepare("SELECT url FROM images_activites WHERE id = ? AND activite_id = ?");
@@ -39,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     }
 }
 
-// ── UPLOAD ────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photos'])) {
     $uploaded = 0; $errors = [];
     foreach ($_FILES['photos']['tmp_name'] as $k => $tmp) {
@@ -73,7 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photos'])) {
     if ($errors)        { $msg .= ($msg ? ' ' : '') . implode(' ', $errors); $msg_type = $msg_type ?: 'error'; }
 }
 
-// Charger toutes les images
 $images = $pdo->prepare("SELECT * FROM images_activites WHERE activite_id = ? ORDER BY id");
 $images->execute([$activite_id]);
 $images = $images->fetchAll();
@@ -126,7 +117,6 @@ $images = $images->fetchAll();
     }
     .empty-photos i { font-size: 2.5rem; opacity: .25; display: block; margin-bottom: 12px; }
 
-    /* Zone upload */
     .upload-box {
       padding: 22px;
       border-top: 1px solid var(--a-border);
@@ -164,7 +154,6 @@ $images = $images->fetchAll();
 </head>
 <body class="admin-body">
 
-<!-- SIDEBAR -->
 <aside class="admin-sidebar">
   <a href="../index.php" class="admin-sidebar-logo">
     <img src="../images/Logo.png" alt="Teranga Azur">
@@ -193,7 +182,6 @@ $images = $images->fetchAll();
   </div>
 </aside>
 
-<!-- MAIN -->
 <main class="admin-main">
   <div class="admin-topbar">
     <div>
@@ -230,7 +218,6 @@ $images = $images->fetchAll();
         </h2>
       </div>
 
-      <!-- Photos existantes -->
       <?php if (!empty($images)): ?>
       <div class="photo-grid">
         <?php foreach ($images as $img): ?>
@@ -255,7 +242,6 @@ $images = $images->fetchAll();
       </div>
       <?php endif; ?>
 
-      <!-- Zone d'upload -->
       <div class="upload-box">
         <form method="POST" enctype="multipart/form-data" id="uploadForm">
           <label for="photoInput" class="upload-label">

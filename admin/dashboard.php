@@ -1,21 +1,15 @@
 <?php
-/**
- * admin/dashboard.php — Tableau de bord administrateur
- */
 require_once '../admin_guard.php';
 require_once '../config/db.php';
 
 $page_title = "Dashboard Admin";
 
-// Statistiques
 $nb_villas    = $pdo->query("SELECT COUNT(*) FROM villas")->fetchColumn();
 $nb_activites = $pdo->query("SELECT COUNT(*) FROM activites")->fetchColumn();
 $nb_clients   = $pdo->query("SELECT COUNT(*) FROM clients WHERE role='client'")->fetchColumn();
 $nb_reserv    = $pdo->query("SELECT COUNT(*) FROM reservations_villas")->fetchColumn();
 
-// Dernières villas
 $last_villas = $pdo->query("SELECT id, titre, prix_par_nuit, localisation FROM villas ORDER BY created_at DESC LIMIT 5")->fetchAll();
-// Dernières activités
 $last_acts   = $pdo->query("SELECT id, nom_activite, prix_par_personne, lieu_depart FROM activites ORDER BY created_at DESC LIMIT 5")->fetchAll();
 ?>
 <!DOCTYPE html>
@@ -31,7 +25,6 @@ $last_acts   = $pdo->query("SELECT id, nom_activite, prix_par_personne, lieu_dep
 </head>
 <body class="admin-body">
 
-<!-- ======= SIDEBAR ======= -->
 <aside class="admin-sidebar">
   <a href="../index.php" class="admin-sidebar-logo">
     <img src="../images/Logo.png" alt="Teranga Azur">
@@ -69,7 +62,6 @@ $last_acts   = $pdo->query("SELECT id, nom_activite, prix_par_personne, lieu_dep
   </div>
 </aside>
 
-<!-- ======= MAIN ======= -->
 <main class="admin-main">
   <div class="admin-topbar">
     <div>
@@ -83,7 +75,6 @@ $last_acts   = $pdo->query("SELECT id, nom_activite, prix_par_personne, lieu_dep
 
   <div class="admin-content">
 
-    <!-- Statistiques -->
     <div class="admin-stats">
       <div class="stat-card">
         <div class="stat-icon blue"><i class="fas fa-home"></i></div>
@@ -115,7 +106,6 @@ $last_acts   = $pdo->query("SELECT id, nom_activite, prix_par_personne, lieu_dep
       </div>
     </div>
 
-    <!-- Dernières villas -->
     <div class="admin-card">
       <div class="admin-card-header">
         <h2><i class="fas fa-home" style="color:var(--admin-accent);margin-right:8px;"></i> Dernières villas</h2>
@@ -154,7 +144,6 @@ $last_acts   = $pdo->query("SELECT id, nom_activite, prix_par_personne, lieu_dep
       </div>
     </div>
 
-    <!-- Dernières activités -->
     <div class="admin-card">
       <div class="admin-card-header">
         <h2><i class="fas fa-compass" style="color:var(--admin-accent);margin-right:8px;"></i> Dernières activités</h2>

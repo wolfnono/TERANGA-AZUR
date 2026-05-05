@@ -34,7 +34,6 @@ $villas = $stmt->fetchAll();
 include 'includes/header.php';
 ?>
 
-<!-- Page Hero -->
 <div class="page-hero" style="background: var(--gradient-hero), url('images/Piscine-Villa2.png') center/cover;">
   <div class="page-hero-content">
     <span class="section-label" style="color:var(--or-sable);">Hébergements</span>
@@ -43,7 +42,6 @@ include 'includes/header.php';
   </div>
 </div>
 
-<!-- Filtres -->
 <div class="filters-bar">
   <form method="GET" action="villas.php" style="display:contents;">
     <div class="filter-group">
@@ -96,7 +94,6 @@ include 'includes/header.php';
   </form>
 </div>
 
-<!-- Résultats -->
 <section class="section" style="padding-top:50px;">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;flex-wrap:wrap;gap:12px;">
     <h2 style="color:var(--bleu-profond);font-size:1.4rem;">

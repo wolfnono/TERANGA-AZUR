@@ -1,18 +1,13 @@
-// js/main.js — Teranga Azur
-
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ---- NAVBAR SCROLL ----
   const navbar = document.getElementById('navbar');
   if (navbar) {
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 50);
     });
-    // Trigger au chargement
     if (window.scrollY > 50) navbar.classList.add('scrolled');
   }
 
-  // ---- MENU HAMBURGER ----
   window.toggleMenu = function () {
     const nav = document.getElementById('navLinks');
     const ham = document.getElementById('hamburger');
@@ -22,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // ---- ANIMATION AU SCROLL ----
   const observerOptions = {
     threshold: 0.12,
     rootMargin: '0px 0px -50px 0px'
@@ -38,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, observerOptions);
 
-  // Observer les cartes et sections
   document.querySelectorAll('.card, .why-item, .stat-item, .section-header').forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(24px)';
@@ -46,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(el);
   });
 
-  // ---- COMPTEURS STATS ----
   const counters = document.querySelectorAll('.stat-number[data-target]');
   const counterObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -69,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   counters.forEach(c => counterObserver.observe(c));
 
-  // ---- NAVBAR ACTIVE LINK ----
   const currentPath = window.location.pathname.split('/').pop() || 'index.php';
   document.querySelectorAll('.nav-links a').forEach(link => {
     const href = link.getAttribute('href');
@@ -78,13 +69,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // ---- SMOOTH REVEAL pour les cards ----
   const cards = document.querySelectorAll('.villa-card, .activite-card');
   cards.forEach((card, index) => {
     card.style.transitionDelay = `${index * 0.08}s`;
   });
 
-  // ---- TOOLTIPS ----
   document.querySelectorAll('[data-tooltip]').forEach(el => {
     const tip = document.createElement('div');
     tip.className = 'tooltip';

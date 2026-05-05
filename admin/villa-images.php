@@ -1,8 +1,4 @@
 <?php
-/**
- * admin/villa-images.php — Gestion des photos d'une villa
- * Upload simple + suppression individuelle
- */
 require_once '../admin_guard.php';
 require_once '../config/db.php';
 
@@ -13,11 +9,9 @@ $ALLOWED = ['image/jpeg','image/png','image/webp','image/gif'];
 
 if (!is_dir(UPLOAD_DIR)) { mkdir(UPLOAD_DIR, 0755, true); }
 
-// ID villa obligatoire
 $villa_id = isset($_GET['villa_id']) && is_numeric($_GET['villa_id']) ? (int)$_GET['villa_id'] : 0;
 if (!$villa_id) { header('Location: villas.php'); exit; }
 
-// Charger la villa
 $s = $pdo->prepare("SELECT * FROM villas WHERE id = ?");
 $s->execute([$villa_id]);
 $villa = $s->fetch();
@@ -25,7 +19,6 @@ if (!$villa) { header('Location: villas.php'); exit; }
 
 $msg = ''; $msg_type = '';
 
-// ── SUPPRESSION ───────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $img_id = (int)$_POST['delete_id'];
     $r = $pdo->prepare("SELECT url FROM images_villas WHERE id = ? AND villa_id = ?");
@@ -39,11 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     }
 }
 
-// ── UPLOAD ────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photos'])) {
     $uploaded = 0; $errors = [];
     foreach ($_FILES['photos']['tmp_name'] as $k => $tmp) {
-        // Remplacer l'ancienne vérification par celle-ci :
         if ($_FILES['photos']['error'][$k] !== UPLOAD_ERR_OK) {
             $err_code = $_FILES['photos']['error'][$k];
             if ($err_code == UPLOAD_ERR_INI_SIZE) {
@@ -78,7 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photos'])) {
     if ($errors)        { $msg .= ($msg ? ' ' : '') . implode(' ', $errors); $msg_type = $msg_type ?: 'error'; }
 }
 
-// Charger toutes les images
 $images = $pdo->prepare("SELECT * FROM images_villas WHERE villa_id = ? ORDER BY id");
 $images->execute([$villa_id]);
 $images = $images->fetchAll();
@@ -131,7 +121,6 @@ $images = $images->fetchAll();
     }
     .empty-photos i { font-size: 2.5rem; opacity: .25; display: block; margin-bottom: 12px; }
 
-    /* Zone upload */
     .upload-box {
       padding: 22px;
       border-top: 1px solid var(--a-border);
@@ -169,7 +158,6 @@ $images = $images->fetchAll();
 </head>
 <body class="admin-body">
 
-<!-- SIDEBAR -->
 <aside class="admin-sidebar">
   <a href="../index.php" class="admin-sidebar-logo">
     <img src="../images/Logo.png" alt="Teranga Azur">
@@ -198,7 +186,6 @@ $images = $images->fetchAll();
   </div>
 </aside>
 
-<!-- MAIN -->
 <main class="admin-main">
   <div class="admin-topbar">
     <div>
@@ -235,7 +222,6 @@ $images = $images->fetchAll();
         </h2>
       </div>
 
-      <!-- Photos existantes -->
       <?php if (!empty($images)): ?>
       <div class="photo-grid">
         <?php foreach ($images as $img): ?>
@@ -260,7 +246,6 @@ $images = $images->fetchAll();
       </div>
       <?php endif; ?>
 
-      <!-- Zone d'upload -->
       <div class="upload-box">
         <form method="POST" enctype="multipart/form-data" id="uploadForm">
           <label for="photoInput" class="upload-label">

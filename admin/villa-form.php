@@ -1,8 +1,4 @@
 <?php
-/**
- * admin/villa-form.php — Formulaire ajout / édition d'une villa (infos uniquement)
- * Les photos sont gérées via villa-images.php
- */
 require_once '../admin_guard.php';
 require_once '../config/db.php';
 
@@ -19,7 +15,6 @@ if ($is_edit) {
     if (!$villa) { header('Location: villas.php'); exit; }
 }
 
-// Traitement POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $titre        = trim($_POST['titre'] ?? '');
     $description  = trim($_POST['description'] ?? '');
@@ -70,7 +65,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="admin-body">
 
-<!-- SIDEBAR -->
 <aside class="admin-sidebar">
   <a href="../index.php" class="admin-sidebar-logo">
     <img src="../images/Logo.png" alt="Teranga Azur">
@@ -99,7 +93,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
 </aside>
 
-<!-- MAIN -->
 <main class="admin-main">
   <div class="admin-topbar">
     <div>
@@ -131,21 +124,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="admin-card-body">
         <form method="POST" class="admin-form">
 
-          <!-- Titre -->
           <div class="field">
             <label for="titre">Titre de la villa *</label>
             <input type="text" id="titre" name="titre" placeholder="Ex : Villa Océane Prestige"
                    value="<?= htmlspecialchars($villa['titre'] ?? '') ?>" required>
           </div>
 
-          <!-- Description -->
           <div class="field">
             <label for="description">Description</label>
             <textarea id="description" name="description" placeholder="Décrivez la villa, ses équipements, son atmosphère..."><?= htmlspecialchars($villa['description'] ?? '') ?></textarea>
           </div>
 
           <div class="form-grid">
-            <!-- Prix -->
             <div class="field">
               <label for="prix_par_nuit">Prix par nuit (XOF) *</label>
               <input type="number" id="prix_par_nuit" name="prix_par_nuit" min="1" step="500"
@@ -153,14 +143,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                      value="<?= htmlspecialchars($villa['prix_par_nuit'] ?? '') ?>" required>
             </div>
 
-            <!-- Localisation -->
             <div class="field">
               <label for="localisation">Localisation</label>
               <input type="text" id="localisation" name="localisation" placeholder="Ex : Saly Portudal, Mbour"
                      value="<?= htmlspecialchars($villa['localisation'] ?? '') ?>">
             </div>
 
-            <!-- Capacité -->
             <div class="field">
               <label for="capacite_max">Capacité max (personnes) *</label>
               <input type="number" id="capacite_max" name="capacite_max" min="1" max="50"
@@ -168,7 +156,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                      value="<?= htmlspecialchars($villa['capacite_max'] ?? '') ?>" required>
             </div>
 
-            <!-- Chambres -->
             <div class="field">
               <label for="chambres">Nombre de chambres *</label>
               <input type="number" id="chambres" name="chambres" min="1" max="20"
@@ -177,7 +164,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
           </div>
 
-          <!-- Piscine -->
           <div class="field">
             <div class="checkbox-field">
               <input type="checkbox" id="piscine" name="piscine" value="1"
@@ -186,7 +172,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
           </div>
 
-          <!-- Boutons -->
           <div style="display:flex;gap:14px;margin-top:18px;">
             <button type="submit" class="btn-admin btn-admin-primary" style="padding:11px 28px;font-size:0.9rem;">
               <i class="fas fa-save"></i> <?= $is_edit ? 'Enregistrer les modifications' : 'Créer la villa' ?>
@@ -200,7 +185,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
-    <!-- Info photos -->
     <?php if ($is_edit): ?>
     <div class="admin-card" style="background:rgba(74,140,125,.06);border-color:rgba(74,140,125,.2);">
       <div class="admin-card-header" style="padding:16px 22px;">

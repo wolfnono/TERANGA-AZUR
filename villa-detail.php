@@ -46,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reserver'])) {
         $ins->execute([$client_id, $id, $date_arrivee, $date_depart, $nb_voyageurs, $prix_total]);
         $res_id = $pdo->lastInsertId();
 
-        // Options
         if (!empty($_POST['services'])) {
           foreach ($_POST['services'] as $service_id) {
             $qte    = (int)($_POST["qte_$service_id"] ?? 1);
@@ -76,19 +75,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reserver'])) {
 include 'includes/header.php';
 ?>
 
-
-<!-- Galerie -->
 <div class="villa-gallery" style="margin-top:80px;">
   <?php
-  // 1. On prépare la liste des images depuis la base de données
   $gallery_images = [];
   if (!empty($images)) {
       foreach ($images as $img) {
-          // On suppose que ta colonne s'appelle 'url' d'après ta page villas.php
           $gallery_images[] = $img['url']; 
       }
   } else {
-      // 2. Sécurité : Images par défaut si la villa n'a aucune photo en base
       $gallery_images = [
           'images/Vue-Balcon.villa2.png',
           'images/Jacuzzi-villa2.png',
@@ -97,7 +91,6 @@ include 'includes/header.php';
       ];
   }
   
-  // L'image principale est la première du tableau
   $main_img = $gallery_images[0];
   ?>
 
@@ -119,11 +112,9 @@ include 'includes/header.php';
   </div>
 </div>
 
-<!-- Détail -->
 <section class="section villa-detail-section">
   <div class="villa-detail-grid">
 
-    <!-- Contenu principal -->
     <div class="villa-main">
       <div class="villa-breadcrumb">
         <a href="index.php">Accueil</a> <span>/</span>
@@ -146,7 +137,6 @@ include 'includes/header.php';
         </div>
       </div>
 
-      <!-- Caractéristiques -->
       <div class="villa-specs">
         <div class="spec-item">
           <i class="fas fa-users"></i>
@@ -170,13 +160,11 @@ include 'includes/header.php';
         </div>
       </div>
 
-      <!-- Description -->
       <div class="villa-description">
         <h2>À propos de cette villa</h2>
         <p><?= nl2br(htmlspecialchars($villa['description'] ?? 'Description en cours de rédaction.')) ?></p>
       </div>
 
-      <!-- Services optionnels -->
       <?php if (!empty($services)): ?>
       <div class="villa-services">
         <h2>Services optionnels disponibles</h2>
@@ -193,7 +181,6 @@ include 'includes/header.php';
       <?php endif; ?>
     </div>
 
-    <!-- Formulaire de réservation -->
     <div class="villa-booking-sidebar">
       <div class="booking-card">
         <div class="booking-price">
@@ -227,7 +214,6 @@ include 'includes/header.php';
             </select>
           </div>
 
-          <!-- Options -->
           <?php if (!empty($services)): ?>
           <div class="form-group">
             <label class="form-label">Services optionnels</label>
@@ -244,7 +230,6 @@ include 'includes/header.php';
           </div>
           <?php endif; ?>
 
-          <!-- Récap prix -->
           <div class="price-summary" id="priceSummary" style="display:none;">
             <div class="price-row">
               <span id="priceLabel">... nuits × ... XOF</span>
@@ -285,7 +270,6 @@ function changeMainImg(thumb) {
   thumb.classList.add('active');
 }
 
-// Calcul prix dynamique
 const arrivee = document.getElementById('dateArrivee');
 const depart  = document.getElementById('dateDepart');
 const summary = document.getElementById('priceSummary');
@@ -313,7 +297,6 @@ arrivee.addEventListener('change', () => {
 });
 depart.addEventListener('change', updatePrice);
 
-// Toggle qte on checkbox
 document.querySelectorAll('.service-checkbox').forEach(cb => {
   cb.addEventListener('change', function() {
     this.closest('.service-option').querySelector('.qty-input').style.display = this.checked ? 'block' : 'none';

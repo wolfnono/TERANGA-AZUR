@@ -1,8 +1,4 @@
 <?php
-/**
- * carte.php — Carte interactive (Leaflet.js local)
- * Villas = épingles bleues  |  Activités = épingles dorées
- */
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require_once 'config/db.php';
 
@@ -22,11 +18,9 @@ $activites = $pdo->query(
 include 'includes/header.php';
 ?>
 
-<!-- Leaflet (local) -->
 <link rel="stylesheet" href="css/leaflet.css">
 
 <style>
-/* ── Hero ──────────────────────────────────────── */
 .carte-hero {
   background: linear-gradient(135deg, #1a3a2e 0%, #2d5a4f 100%);
   padding: 64px 5% 44px;
@@ -49,7 +43,6 @@ include 'includes/header.php';
   line-height: 1.7;
 }
 
-/* ── Légende ──────────────────────────────────── */
 .carte-legende {
   background: #fff;
   border-bottom: 1px solid #e8e2d8;
@@ -71,7 +64,6 @@ include 'includes/header.php';
 .legende-dot.gold { background: #d4af5a; }
 .legende-note { margin-left: auto; font-size: 0.75rem; color: #5a6a7a; font-style: italic; }
 
-/* ── Carte + Sidebar ──────────────────────────── */
 .carte-wrap {
   display: flex;
   height: 580px;
@@ -79,7 +71,6 @@ include 'includes/header.php';
   border-bottom: 1px solid #e8e2d8;
 }
 
-/* La carte prend tout l'espace restant */
 #map {
   flex: 1 1 auto;
   height: 580px;      /* hauteur fixe explicite */
@@ -87,7 +78,6 @@ include 'includes/header.php';
   z-index: 1;
 }
 
-/* Sidebar */
 .carte-sidebar {
   width: 310px;
   flex: 0 0 310px;
@@ -105,7 +95,6 @@ include 'includes/header.php';
   .carte-sidebar { width: 100%; flex: none; height: 260px; border-left: none; border-top: 1px solid #e8e2d8; }
 }
 
-/* Onglets sidebar */
 .csb-tabs {
   display: flex;
   border-bottom: 1px solid #e8e2d8;
@@ -121,7 +110,6 @@ include 'includes/header.php';
 .csb-tab.active { color: #1a3a2e; border-bottom-color: #d4af5a; }
 .csb-tab i { margin-right: 4px; }
 
-/* Liste */
 .csb-list { overflow-y: auto; flex: 1; padding: 8px; display: none; }
 .csb-list.active { display: block; }
 
@@ -149,7 +137,6 @@ include 'includes/header.php';
 .csb-sub { font-size: 0.72rem; color: #5a6a7a; margin-top: 1px; }
 .csb-price { font-size: 0.76rem; font-weight: 700; color: #d4af5a; white-space: nowrap; flex-shrink: 0; }
 
-/* Popups Leaflet */
 .leaflet-popup-content-wrapper {
   border-radius: 12px !important;
   box-shadow: 0 8px 28px rgba(0,0,0,.16) !important;
@@ -173,21 +160,18 @@ include 'includes/header.php';
 .pp-btn:hover { background: #2d5a4f; }
 </style>
 
-<!-- HERO -->
 <section class="carte-hero">
   <div class="section-label"><i class="fas fa-map-marked-alt"></i>&nbsp; Petite Côte, Sénégal</div>
   <h1>Carte Interactive</h1>
   <p>Retrouvez toutes nos villas et activités. Cliquez sur une épingle pour en savoir plus.</p>
 </section>
 
-<!-- LÉGENDE -->
 <div class="carte-legende">
   <div class="legende-item"><div class="legende-dot blue"></div> Villas (<?= count($villas) ?>)</div>
   <div class="legende-item"><div class="legende-dot gold"></div> Activités (<?= count($activites) ?>)</div>
   <div class="legende-note"><i class="fas fa-info-circle"></i>&nbsp; Coordonnées fictives — projet académique</div>
 </div>
 
-<!-- CARTE + SIDEBAR -->
 <div class="carte-wrap">
   <div id="map"></div>
 
@@ -231,10 +215,8 @@ include 'includes/header.php';
   </aside>
 </div>
 
-<!-- Leaflet JS (local) -->
 <script src="js/leaflet.js"></script>
 <script>
-/* ── Données PHP → JS ─────────────────────────────── */
 const VD = <?= json_encode(array_map(fn($v)=>[
   'id'=>(int)$v['id'],'titre'=>$v['titre'],'loc'=>$v['localisation'],
   'prix'=>(int)$v['prix_par_nuit'],'ch'=>(int)$v['chambres'],'cap'=>(int)$v['capacite_max'],
@@ -247,7 +229,6 @@ const AD = <?= json_encode(array_map(fn($a)=>[
   'lat'=>(float)$a['latitude'],'lng'=>(float)$a['longitude'],
 ],$activites),JSON_UNESCAPED_UNICODE) ?>;
 
-/* ── Init Leaflet ─────────────────────────────────── */
 const map = L.map('map',{center:[14.45,-17.0],zoom:10});
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
@@ -255,7 +236,6 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
   attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
-/* ── Icône SVG custom ─────────────────────────────── */
 function svgIcon(color,letter){
   return L.divIcon({
     className:'',
@@ -274,7 +254,6 @@ const iV = svgIcon('#2563eb','V');
 const iA = svgIcon('#d97706','A');
 const MK = {v:{},a:{}};
 
-/* ── Marqueurs Villas ─────────────────────────────── */
 VD.forEach(v=>{
   const pop=`<div class="pp-head"><div class="pp-type v">Villa</div><div class="pp-name">${v.titre}</div></div>
     <div class="pp-body">
@@ -288,7 +267,6 @@ VD.forEach(v=>{
   MK.v[v.id]=m;
 });
 
-/* ── Marqueurs Activités ──────────────────────────── */
 AD.forEach(a=>{
   const pop=`<div class="pp-head"><div class="pp-type a">Activité</div><div class="pp-name">${a.nom}</div></div>
     <div class="pp-body">
@@ -302,7 +280,6 @@ AD.forEach(a=>{
   MK.a[a.id]=m;
 });
 
-/* ── Fonctions ────────────────────────────────────── */
 function zoomTo(t,id){
   const m=MK[t][id]; if(!m) return;
   map.flyTo(m.getLatLng(),14,{duration:0.7});
@@ -316,7 +293,6 @@ function hlItem(t,id){
   if(!el) return;
   el.classList.add('hl');
   el.scrollIntoView({block:'nearest',behavior:'smooth'});
-  // Basculer sur le bon onglet
   const listEl=el.closest('.csb-list');
   if(listEl && !listEl.classList.contains('active')){
     const tabId=listEl.id==='list-v'?'v':'a';
@@ -332,7 +308,6 @@ function switchTab(id,btn){
   btn.classList.add('active');
 }
 
-/* ── Centrage auto sur les points ─────────────────── */
 const pts=[...VD.map(v=>[v.lat,v.lng]),...AD.map(a=>[a.lat,a.lng])];
 if(pts.length>1){
   map.fitBounds(L.latLngBounds(pts).pad(0.15),{maxZoom:13});
@@ -340,7 +315,6 @@ if(pts.length>1){
   map.setView(pts[0],13);
 }
 
-/* ── Forcer un redimensionnement après chargement ─── */
 setTimeout(()=>map.invalidateSize(),300);
 </script>
 

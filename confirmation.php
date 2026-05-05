@@ -1,8 +1,4 @@
 <?php
-/**
- * confirmation.php — Page de confirmation de réservation
- * Affiche le numéro de réservation et résumé
- */
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 require_once 'config/db.php';
 
@@ -13,7 +9,6 @@ if (!$reservation_id) {
     exit;
 }
 
-// Récupérer les détails de la réservation
 $stmt = $pdo->prepare("SELECT * FROM reservations WHERE id = ?");
 $stmt->execute([$reservation_id]);
 $reservation = $stmt->fetch();
@@ -23,7 +18,6 @@ if (!$reservation) {
     exit;
 }
 
-// Récupérer les détails de l'item (villa ou activité)
 $item = null;
 $item_type_label = $reservation['type'] === 'villa' ? 'Villa' : 'Activité';
 

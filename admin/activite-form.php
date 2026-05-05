@@ -1,7 +1,4 @@
 <?php
-/**
- * admin/activite-form.php — Formulaire ajout / édition activité (avec upload image simple)
- */
 require_once '../admin_guard.php';
 require_once '../config/db.php';
 
@@ -20,7 +17,6 @@ if ($is_edit) {
     if (!$act) { header('Location: activites.php'); exit; }
 }
 
-// POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom    = trim($_POST['nom_activite'] ?? '');
     $desc   = trim($_POST['description'] ?? '');
@@ -34,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($duree < 1) $errors[] = "La durée doit être au moins 1h.";
     if ($prix <= 0) $errors[] = "Le prix doit être > 0.";
 
-    // Upload image
     if (!empty($_FILES['image']['tmp_name']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $tmp  = $_FILES['image']['tmp_name'];
         $mime = mime_content_type($tmp);
@@ -46,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $ext = ['image/jpeg'=>'jpg','image/png'=>'png','image/webp'=>'webp','image/gif'=>'gif'][$mime];
             $fn  = 'act_' . uniqid() . '.' . $ext;
             if (move_uploaded_file($tmp, ACT_DIR . $fn)) {
-                // Supprimer l'ancienne image
                 if (!empty($act['image_url'])) {
                     $old = __DIR__ . '/../' . $act['image_url'];
                     if (file_exists($old)) { @unlink($old); }
@@ -95,7 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="admin-body">
 
-<!-- SIDEBAR -->
 <aside class="admin-sidebar">
   <a href="../index.php" class="admin-sidebar-logo">
     <img src="../images/Logo.png" alt="Teranga Azur">
@@ -124,7 +117,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
 </aside>
 
-<!-- MAIN -->
 <main class="admin-main">
   <div class="admin-topbar">
     <div>
@@ -156,35 +148,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="admin-card-body">
         <form method="POST" enctype="multipart/form-data" class="admin-form">
 
-          <!-- Nom -->
           <div class="field">
             <label for="nom">Nom de l'activité *</label>
             <input type="text" id="nom" name="nom_activite" placeholder="Ex : Tour en pirogue sur le Saloum"
                    value="<?= htmlspecialchars($act['nom_activite'] ?? '') ?>" required>
           </div>
 
-          <!-- Description -->
           <div class="field">
             <label for="desc">Description</label>
             <textarea id="desc" name="description" placeholder="Décrivez l'activité, ce qui est inclus..."><?= htmlspecialchars($act['description'] ?? '') ?></textarea>
           </div>
 
           <div class="form-grid">
-            <!-- Durée -->
             <div class="field">
               <label for="duree">Durée (heures) *</label>
               <input type="number" id="duree" name="duree_heures" min="1" max="48"
                      value="<?= htmlspecialchars($act['duree_heures'] ?? '') ?>" required>
             </div>
 
-            <!-- Prix -->
             <div class="field">
               <label for="prix">Prix par personne (XOF) *</label>
               <input type="number" id="prix" name="prix_par_personne" min="1" step="500"
                      value="<?= htmlspecialchars($act['prix_par_personne'] ?? '') ?>" required>
             </div>
 
-            <!-- Lieu -->
             <div class="field form-grid-span">
               <label for="lieu">Lieu de départ</label>
               <input type="text" id="lieu" name="lieu_depart" placeholder="Ex : Port de Mbour"
@@ -192,7 +179,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
           </div>
 
-          <!-- Photo actuelle -->
           <?php if (!empty($act['image_url'])): ?>
           <div class="field" style="background:rgba(74,140,125,.05);padding:18px;border-radius:10px;border:1px solid rgba(74,140,125,.15);">
             <div style="display:flex;align-items:flex-start;gap:16px;">
@@ -210,7 +196,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
           <?php endif; ?>
 
-          <!-- Upload image -->
           <div class="field">
             <label for="image"><?= !empty($act['image_url']) ? 'Remplacer la photo' : 'Photo de l\'activité' ?></label>
             <div style="position:relative;">
@@ -225,7 +210,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p style="font-size:0.75rem;color:var(--a-muted);margin-top:8px;">JPG, PNG, WebP — 5 Mo max</p>
           </div>
 
-          <!-- Boutons -->
           <div style="display:flex;gap:14px;margin-top:18px;">
             <button type="submit" class="btn-admin btn-admin-primary" style="padding:11px 28px;font-size:0.9rem;">
               <i class="fas fa-save"></i> <?= $is_edit ? 'Enregistrer les modifications' : "Créer l'activité" ?>
@@ -239,7 +223,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
-    <!-- Info photos -->
     <?php if ($is_edit): ?>
     <div class="admin-card" style="background:rgba(74,140,125,.06);border-color:rgba(74,140,125,.2);">
       <div class="admin-card-header" style="padding:16px 22px;">

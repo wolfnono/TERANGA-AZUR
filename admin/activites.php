@@ -1,11 +1,7 @@
 <?php
-/**
- * admin/activites.php — Liste et gestion des activités
- */
 require_once '../admin_guard.php';
 require_once '../config/db.php';
 
-// Suppression
 $msg = ''; $msg_type = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete']) && is_numeric($_POST['delete'])) {
     $id = (int)$_POST['delete'];
@@ -33,7 +29,6 @@ $activites = $pdo->query("SELECT * FROM activites ORDER BY created_at DESC")->fe
 </head>
 <body class="admin-body">
 
-<!-- SIDEBAR -->
 <aside class="admin-sidebar">
   <a href="../index.php" class="admin-sidebar-logo">
     <img src="../images/Logo.png" alt="Teranga Azur">
@@ -62,7 +57,6 @@ $activites = $pdo->query("SELECT * FROM activites ORDER BY created_at DESC")->fe
   </div>
 </aside>
 
-<!-- MAIN -->
 <main class="admin-main">
   <div class="admin-topbar">
     <div>

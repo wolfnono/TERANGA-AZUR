@@ -1,6 +1,3 @@
-/* css/villa-detail.css */
-
-/* Gallery */
 .villa-gallery {
   display: grid;
   grid-template-columns: 1fr 200px;
@@ -46,7 +43,6 @@
   border-color: var(--or-sable);
 }
 
-/* Villa detail layout */
 .villa-detail-section {
   padding-top: 40px;
 }
@@ -171,7 +167,6 @@
   font-size: 0.9rem;
 }
 
-/* Booking sidebar */
 .villa-booking-sidebar {
   position: sticky;
   top: 100px;
@@ -264,7 +259,6 @@
   margin-bottom: 0;
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
   .villa-detail-grid {
     grid-template-columns: 1fr;

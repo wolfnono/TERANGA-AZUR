@@ -10,7 +10,6 @@ if (!isset($_SESSION['client_id'])) {
 $page_title = "Mes Réservations";
 $client_id  = $_SESSION['client_id'];
 
-// Réservations villas
 $stmt = $pdo->prepare("
   SELECT rv.*, v.titre, v.localisation, v.prix_par_nuit, v.chambres
   FROM reservations_villas rv
@@ -21,7 +20,6 @@ $stmt = $pdo->prepare("
 $stmt->execute([$client_id]);
 $reservations_villas = $stmt->fetchAll();
 
-// Réservations activités
 $stmt2 = $pdo->prepare("
   SELECT ra.*, a.nom_activite, a.lieu_depart, a.duree_heures
   FROM reservations_activites ra
@@ -32,12 +30,10 @@ $stmt2 = $pdo->prepare("
 $stmt2->execute([$client_id]);
 $reservations_activites = $stmt2->fetchAll();
 
-// Client info
 $stmt3 = $pdo->prepare("SELECT * FROM clients WHERE id = ?");
 $stmt3->execute([$client_id]);
 $client = $stmt3->fetch();
 
-// Annulation
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if (isset($_POST['annuler_villa'])) {
     $res_id = (int)$_POST['res_id'];
@@ -74,7 +70,6 @@ include 'includes/header.php';
   </div>
   <?php endif; ?>
 
-  <!-- VILLAS -->
   <div style="margin-bottom:60px;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px;">
       <h2 style="color:var(--bleu-profond);font-size:1.8rem;">
@@ -137,7 +132,6 @@ include 'includes/header.php';
     <?php endif; ?>
   </div>
 
-  <!-- ACTIVITÉS -->
   <div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px;">
       <h2 style="color:var(--bleu-profond);font-size:1.8rem;">
